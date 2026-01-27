@@ -168,32 +168,31 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
           </div>
         </div>
 
-        {/* Competitor score cards with gradient coloring */}
-        <div className="grid grid-cols-6 gap-2 mb-4 pb-4 border-b border-border">
+        {/* Competitor score cards - compact */}
+        <div className="flex gap-2 mb-4 pb-4 border-b border-border">
           {allScores.slice(0, 6).map((item, idx) => {
-            // Color based on score: green (7+), yellow (5-7), red (<5)
             const getScoreStyles = (score: number) => {
-              if (score >= 7) return "bg-[hsl(var(--rating-positive))]/10 border-[hsl(var(--rating-positive))]/30 text-[hsl(var(--rating-positive))]";
-              if (score >= 5) return "bg-amber-500/10 border-amber-500/30 text-amber-600";
-              return "bg-[hsl(var(--rating-negative))]/10 border-[hsl(var(--rating-negative))]/30 text-[hsl(var(--rating-negative))]";
+              if (score >= 7) return "bg-[hsl(var(--rating-positive))]/10 text-[hsl(var(--rating-positive))]";
+              if (score >= 5) return "bg-amber-500/10 text-amber-600";
+              return "bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))]";
             };
             
             return (
               <div 
                 key={item.name}
                 className={cn(
-                  "flex flex-col items-center justify-center p-2 rounded-lg border transition-all",
+                  "flex-1 flex flex-col items-center py-1.5 px-2 rounded-md",
                   getScoreStyles(item.score),
-                  item.isYou && "ring-2 ring-primary ring-offset-1"
+                  item.isYou && "ring-1 ring-primary"
                 )}
               >
-                <span className="text-[10px] opacity-60 mb-0.5">#{idx + 1}</span>
-                <span className="text-xs font-medium truncate max-w-full text-center">
+                <span className="text-[9px] opacity-50">#{idx + 1}</span>
+                <span className="text-[11px] font-medium">
                   {item.isYou ? "You" : item.name.split(" ")[0]}
                 </span>
-                <div className="flex items-baseline gap-0.5 mt-1">
-                  <span className="text-lg font-bold">{item.score}</span>
-                  <span className="text-[10px] opacity-60">/10</span>
+                <div className="flex items-baseline">
+                  <span className="text-sm font-bold">{item.score}</span>
+                  <span className="text-[8px] opacity-50">/10</span>
                 </div>
               </div>
             );
