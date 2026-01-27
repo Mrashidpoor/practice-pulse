@@ -1,5 +1,4 @@
 import { ThumbsUp, ThumbsDown, Minus } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 interface MetricCardProps {
@@ -27,73 +26,60 @@ export function MetricCard({
   const percentageOfCompetitor = compNum > 0 ? (yourNum / compNum) * 100 : 100;
 
   return (
-    <Card className="bg-card border-border shadow-sm">
-      <CardContent className="p-5">
-        <h4 className="text-sm font-medium text-muted-foreground mb-4">{title}</h4>
+    <div className="bg-card border border-border rounded-lg p-3">
+      <div className="flex items-center justify-between mb-2">
+        <h4 className="text-xs font-medium text-muted-foreground">{title}</h4>
+        {showDifference && (
+          <span
+            className={cn(
+              "flex items-center gap-1 text-xs font-medium",
+              isAhead && "text-[hsl(var(--rating-positive))]",
+              isBehind && "text-[hsl(var(--rating-negative))]",
+              !isAhead && !isBehind && "text-muted-foreground"
+            )}
+          >
+            {isAhead ? (
+              <>
+                <ThumbsUp className="h-3 w-3" />
+                +{Math.abs(difference)}{type === "percentage" ? "%" : ""}
+              </>
+            ) : isBehind ? (
+              <>
+                <ThumbsDown className="h-3 w-3" />
+                -{Math.abs(difference)}{type === "percentage" ? "%" : ""}
+              </>
+            ) : (
+              <>
+                <Minus className="h-3 w-3" />
+                Tied
+              </>
+            )}
+          </span>
+        )}
+      </div>
 
-        <div className="space-y-3">
-          {/* Your Practice */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs text-muted-foreground">Your Practice</span>
-              <span className="text-lg font-bold text-foreground">
-                {yourValue}
-              </span>
-            </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary rounded-full transition-all"
-                style={{ width: `${Math.min(percentageOfCompetitor, 100)}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Competitor */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-xs text-muted-foreground">{competitorName}</span>
-              <span className="text-sm font-medium text-muted-foreground">
-                {competitorValue}
-              </span>
-            </div>
-            <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-muted-foreground/30 rounded-full"
-                style={{ width: "100%" }}
-              />
-            </div>
-          </div>
-
-          {/* Difference Indicator */}
-          {showDifference && (
+      <div className="space-y-1.5">
+        {/* Your Practice */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground w-16 shrink-0">You</span>
+          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
             <div
-              className={cn(
-                "flex items-center gap-1.5 text-xs font-medium pt-2",
-                isAhead && "text-[hsl(var(--rating-positive))]",
-                isBehind && "text-[hsl(var(--rating-negative))]",
-                !isAhead && !isBehind && "text-muted-foreground"
-              )}
-            >
-              {isAhead ? (
-                <>
-                  <ThumbsUp className="h-3.5 w-3.5" />
-                  <span>Ahead by {Math.abs(difference)}{type === "percentage" ? "%" : ""}</span>
-                </>
-              ) : isBehind ? (
-                <>
-                  <ThumbsDown className="h-3.5 w-3.5" />
-                  <span>{Math.abs(difference)}{type === "percentage" ? "%" : ""} to catch up</span>
-                </>
-              ) : (
-                <>
-                  <Minus className="h-3.5 w-3.5" />
-                  <span>Tied</span>
-                </>
-              )}
-            </div>
-          )}
+              className="h-full bg-primary rounded-full"
+              style={{ width: `${Math.min(percentageOfCompetitor, 100)}%` }}
+            />
+          </div>
+          <span className="text-sm font-bold text-foreground w-12 text-right">{yourValue}</span>
         </div>
-      </CardContent>
-    </Card>
+
+        {/* Competitor */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground w-16 shrink-0 truncate">{competitorName.split(' ')[0]}</span>
+          <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="h-full bg-muted-foreground/30 rounded-full w-full" />
+          </div>
+          <span className="text-xs text-muted-foreground w-12 text-right">{competitorValue}</span>
+        </div>
+      </div>
+    </div>
   );
 }
