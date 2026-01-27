@@ -102,8 +102,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: XCircle,
       colorClass: "text-[hsl(var(--rating-negative))]",
       score: 4.2,
-      insight: { label: "266 fewer reviews than top competitor", value: "35th %ile", trend: "down" },
-      actionLabel: "Launch review campaign"
+      insight: { label: "Wait time mentioned in 23% of reviews", value: "-12% MoM", trend: "down" },
+      actionLabel: "Reduce wait times"
     },
     {
       title: "Opportunities",
