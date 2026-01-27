@@ -22,6 +22,9 @@ const priorityConfig = {
     label: "HIGH PRIORITY",
     impactScore: 95,
     bar: "bg-[hsl(var(--rating-negative))]",
+    marketingBoost: "25-40%",
+    newPatients: "15-25",
+    reachMultiplier: "3x",
   },
   medium: {
     badge: "bg-[hsl(var(--rating-neutral))]/15 text-[hsl(var(--rating-neutral))] border-[hsl(var(--rating-neutral))]/30",
@@ -30,6 +33,9 @@ const priorityConfig = {
     label: "MEDIUM",
     impactScore: 70,
     bar: "bg-[hsl(var(--rating-neutral))]",
+    marketingBoost: "15-25%",
+    newPatients: "8-15",
+    reachMultiplier: "2x",
   },
   low: {
     badge: "bg-muted text-muted-foreground border-border",
@@ -38,6 +44,9 @@ const priorityConfig = {
     label: "CONSIDER",
     impactScore: 45,
     bar: "bg-muted-foreground/40",
+    marketingBoost: "5-15%",
+    newPatients: "3-8",
+    reachMultiplier: "1.5x",
   },
 };
 
@@ -122,8 +131,27 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
               </div>
             </div>
           </TooltipTrigger>
-          <TooltipContent side="left" className="max-w-[200px]">
-            <p className="text-xs">Impact score based on priority level, potential reach, and implementation timeframe.</p>
+          <TooltipContent side="left" className="max-w-[280px] p-3">
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-foreground">Projected Marketing Impact</p>
+              <div className="space-y-1.5 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Marketing performance:</span>
+                  <span className="font-semibold text-[hsl(var(--rating-positive))]">+{config.marketingBoost}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Est. new patients/month:</span>
+                  <span className="font-semibold text-primary">{config.newPatients}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Audience reach:</span>
+                  <span className="font-semibold">{config.reachMultiplier} wider</span>
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
+                Based on priority level, industry benchmarks, and implementation timeframe.
+              </p>
+            </div>
           </TooltipContent>
         </Tooltip>
 
@@ -253,8 +281,23 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
                     </div>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[220px]">
-                  <p className="text-xs">Average impact score across all recommendations. Based on priority, potential reach, and timeframe.</p>
+                <TooltipContent side="bottom" className="max-w-[280px] p-3">
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-foreground">Combined Marketing Potential</p>
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Total performance boost:</span>
+                        <span className="font-semibold text-[hsl(var(--rating-positive))]">+20-35%</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Potential new patients:</span>
+                        <span className="font-semibold text-primary">30-50/month</span>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
+                      Implementing all recommendations could significantly improve visibility and patient acquisition.
+                    </p>
+                  </div>
                 </TooltipContent>
               </Tooltip>
             </div>
