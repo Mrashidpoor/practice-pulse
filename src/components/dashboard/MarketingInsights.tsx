@@ -182,7 +182,7 @@ export function MarketingInsights({
           {/* SECTION 2: Monthly Target + Stats + Trend */}
           <div className="p-4">
             {/* Monthly Target + Action Stats + Trend Chart Row */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border">
+            <div className="grid grid-cols-3 gap-4">
               {/* Monthly Target with Progress */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
