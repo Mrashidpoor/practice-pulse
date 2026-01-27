@@ -216,8 +216,8 @@ export function MarketingInsights({
 
       {/* Marketing Recommendations */}
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2">Marketing Recommendations</h3>
-        <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-foreground mb-3">Marketing Recommendations</h3>
+        <div className="grid grid-cols-3 gap-3">
           {sortedRecommendations.map((rec, index) => (
             <RecommendationCard key={index} recommendation={rec} />
           ))}
