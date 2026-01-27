@@ -120,8 +120,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: AlertTriangle,
       colorClass: "text-orange-500",
       score: 5.8,
-      insight: { label: "Competitor gaining 5 more reviews/month on average", value: "~22mo gap", trend: "down" },
-      actionLabel: "Accelerate growth"
+      insight: { label: "Competitor outperforms on: billing transparency, anxiety care, and wait times", value: "3 key areas", trend: "down" },
+      actionLabel: "Close the gap"
     }
   ];
   const overallScore = ((8.5 + (10 - 4.2) + 7.1 + (10 - 5.8)) / 4).toFixed(1);
