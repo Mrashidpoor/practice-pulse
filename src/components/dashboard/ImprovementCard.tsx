@@ -29,22 +29,22 @@ const getPriorityStyles = (rank: number): {
   if (rank === 1) {
     return {
       label: "Important",
-      badgeClass: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
-      cardClass: "border-l-4 border-l-amber-400 bg-amber-50/50 dark:bg-amber-950/20",
-      iconBgClass: "bg-amber-100 dark:bg-amber-900/30",
+      badgeClass: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-0",
+      cardClass: "border-l-4 border-l-red-400 bg-red-50/60 dark:bg-red-950/30",
+      iconBgClass: "bg-red-100 dark:bg-red-900/30",
     };
   } else if (rank <= 3) {
     return {
       label: "Needs Improvement",
-      badgeClass: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 border-0",
-      cardClass: "border-l-4 border-l-orange-300 bg-orange-50/30 dark:bg-orange-950/10",
-      iconBgClass: "bg-orange-100 dark:bg-orange-900/30",
+      badgeClass: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
+      cardClass: "border-l-4 border-l-amber-300 bg-amber-50/40 dark:bg-amber-950/20",
+      iconBgClass: "bg-amber-100 dark:bg-amber-900/30",
     };
   } else {
     return {
       label: "Consider",
       badgeClass: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
-      cardClass: "border-l-4 border-l-slate-300 bg-slate-50/30 dark:bg-slate-800/20",
+      cardClass: "border-l-4 border-l-slate-300 bg-slate-100/50 dark:bg-slate-800/30",
       iconBgClass: "bg-slate-100 dark:bg-slate-800",
     };
   }
