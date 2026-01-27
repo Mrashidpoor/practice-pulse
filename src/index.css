@@ -39,12 +39,17 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     /* Dashboard semantic tokens */
-    --improvement: 36 96% 55%;
+    --improvement: 38 92% 50%;
     --improvement-foreground: 26 90% 30%;
     --strength: 152 69% 41%;
     --strength-foreground: 152 69% 20%;
     --metrics: 174 50% 36%;
     --metrics-foreground: 0 0% 100%;
+
+    /* Rating colors - softer palette */
+    --rating-positive: 152 69% 41%;
+    --rating-neutral: 38 92% 50%;
+    --rating-negative: 25 95% 53%;
 
     /* Rating colors */
     --rating-positive: 152 69% 41%;
@@ -91,12 +96,17 @@ All colors MUST be HSL.
     --ring: 174 50% 45%;
 
     /* Dashboard semantic tokens (dark) */
-    --improvement: 36 96% 60%;
-    --improvement-foreground: 36 96% 90%;
+    --improvement: 38 92% 55%;
+    --improvement-foreground: 38 92% 90%;
     --strength: 152 69% 50%;
     --strength-foreground: 152 69% 95%;
     --metrics: 174 50% 50%;
     --metrics-foreground: 174 50% 95%;
+
+    /* Rating colors (dark) - softer palette */
+    --rating-positive: 152 69% 50%;
+    --rating-neutral: 38 92% 55%;
+    --rating-negative: 25 95% 58%;
 
     /* Rating colors (dark) */
     --rating-positive: 152 69% 50%;
