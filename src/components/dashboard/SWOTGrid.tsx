@@ -38,8 +38,9 @@ function SWOTColumn({ data }: { data: SWOTSectionData }) {
           <Icon className={cn("h-4 w-4", colorClass)} />
           <h4 className="font-semibold text-sm text-foreground">{title}</h4>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-baseline gap-0.5">
           <span className={cn("text-lg font-bold", colorClass)}>{score}</span>
+          <span className="text-[10px] text-muted-foreground">/10</span>
         </div>
       </div>
 
