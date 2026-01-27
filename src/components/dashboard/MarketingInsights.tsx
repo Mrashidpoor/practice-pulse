@@ -1,9 +1,8 @@
-import { TrendingUp, Target, Calendar, BarChart3 } from "lucide-react";
+import { TrendingUp, TrendingDown, Target, Calendar, ArrowUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MetricCard } from "./MetricCard";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
+import { cn } from "@/lib/utils";
 import type {
   ImprovingTrend,
   ReviewMetrics,
@@ -22,6 +21,76 @@ interface MarketingInsightsProps {
   seasonalTips?: SeasonalTip[];
 }
 
+// Compact metric stat
+const MetricStat = ({ 
+  label, 
+  you, 
+  them, 
+  suffix = "" 
+}: { 
+  label: string; 
+  you: number | string; 
+  them: number | string;
+  suffix?: string;
+}) => {
+  const youNum = typeof you === "string" ? parseFloat(you) : you;
+  const themNum = typeof them === "string" ? parseFloat(them) : them;
+  const diff = youNum - themNum;
+  const isAhead = diff > 0;
+  
+  return (
+    <div className="text-center">
+      <p className="text-[10px] text-muted-foreground mb-0.5">{label}</p>
+      <p className="text-base font-bold text-foreground">{you}{suffix}</p>
+      <p className={cn(
+        "text-[10px] font-medium",
+        isAhead ? "text-[hsl(var(--rating-positive))]" : "text-[hsl(var(--rating-negative))]"
+      )}>
+        {isAhead ? "+" : ""}{diff}{suffix}
+      </p>
+    </div>
+  );
+};
+
+// Progress ring for monthly target
+const TargetRing = ({ current, target }: { current: string; target: string }) => {
+  const currentNum = parseFloat(current) || 0;
+  const targetNum = parseFloat(target) || 1;
+  const percentage = Math.min((currentNum / targetNum) * 100, 100);
+  const size = 48;
+  const strokeWidth = 4;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const offset = circumference - (percentage / 100) * circumference;
+  
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={strokeWidth}
+          className="fill-none stroke-muted"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          className="fill-none stroke-primary transition-all duration-500"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-[10px] font-bold">{current}/{target}</span>
+      </div>
+    </div>
+  );
+};
+
 export function MarketingInsights({
   improvingTrend,
   metrics,
@@ -35,89 +104,82 @@ export function MarketingInsights({
     return priorityOrder[a.priority] - priorityOrder[b.priority];
   });
 
+  const behindNum = parseInt(improvingTrend.behindBy) || 0;
+  const isAhead = behindNum <= 0;
+
   return (
     <div className="space-y-4">
-      {/* Combined: Reputation Momentum + Review Metrics */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-4">
-          {/* Header row */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-                <TrendingUp className="h-4 w-4 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-sm text-foreground">Reputation Momentum</h3>
-                <p className="text-xs text-muted-foreground line-clamp-1">{improvingTrend.message}</p>
-              </div>
+      {/* Unified Performance Card */}
+      <Card className="bg-card border-border shadow-sm overflow-hidden">
+        <CardContent className="p-0">
+          {/* Top: Status bar */}
+          <div className={cn(
+            "flex items-center justify-between px-4 py-2",
+            isAhead ? "bg-[hsl(var(--rating-positive))]/10" : "bg-[hsl(var(--rating-negative))]/10"
+          )}>
+            <div className="flex items-center gap-2">
+              {isAhead ? (
+                <TrendingUp className="h-4 w-4 text-[hsl(var(--rating-positive))]" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-[hsl(var(--rating-negative))]" />
+              )}
+              <span className={cn(
+                "text-xs font-semibold",
+                isAhead ? "text-[hsl(var(--rating-positive))]" : "text-[hsl(var(--rating-negative))]"
+              )}>
+                {isAhead ? "Leading" : `${improvingTrend.behindBy} behind`}
+              </span>
             </div>
-            <div className="flex gap-1.5 shrink-0">
-              <Badge variant="outline" className="bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5">
-                Behind by {improvingTrend.behindBy}
-              </Badge>
-              <Badge variant="outline" className="bg-muted text-muted-foreground border-0 text-xs px-2 py-0.5">
-                {improvingTrend.percentile}
-              </Badge>
-            </div>
+            <span className="text-[10px] text-muted-foreground font-medium">
+              {improvingTrend.percentile}
+            </span>
           </div>
 
-          {/* Metrics row */}
-          <div className="grid grid-cols-4 gap-4 pt-3 border-t border-border">
-            <MetricCard
-              title="Total Reviews"
-              yourValue={metrics.totalReviews}
-              competitorValue={metrics.totalReviewsCompetitor}
+          {/* Middle: Metrics grid */}
+          <div className="grid grid-cols-5 divide-x divide-border py-4 px-2">
+            <MetricStat 
+              label="Total" 
+              you={metrics.totalReviews} 
+              them={metrics.totalReviewsCompetitor} 
             />
-            <MetricCard
-              title="Last 12 Mo"
-              yourValue={metrics.last12MonthsReviews}
-              competitorValue={metrics.last12MonthsReviewsCompetitor}
+            <MetricStat 
+              label="12 Mo" 
+              you={metrics.last12MonthsReviews} 
+              them={metrics.last12MonthsReviewsCompetitor} 
             />
-            <MetricCard
-              title="Positive (12 Mo)"
-              yourValue={metrics.positiveReviews12Mo}
-              competitorValue={metrics.positiveReviews12MoCompetitor}
+            <MetricStat 
+              label="Positive" 
+              you={metrics.positiveReviews12Mo} 
+              them={metrics.positiveReviews12MoCompetitor} 
             />
-            <MetricCard
-              title="Positive Rate"
-              yourValue={metrics.positiveRate}
-              competitorValue={metrics.positiveRateCompetitor}
-              type="percentage"
+            <MetricStat 
+              label="Rate" 
+              you={metrics.positiveRate} 
+              them={metrics.positiveRateCompetitor}
+              suffix="%" 
             />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Section 3: Monthly Review Target - compact inline */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-3">
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
-              <Target className="h-4 w-4 text-primary" />
-            </div>
-            <div className="flex items-center gap-4 flex-wrap flex-1">
-              <h4 className="text-sm font-semibold text-foreground">Monthly Target</h4>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground">Current: <span className="font-bold text-foreground">{monthlyTarget.current}</span></span>
-                <span className="text-xs text-muted-foreground">Target: <span className="font-bold text-primary">{monthlyTarget.target}</span></span>
-                <Badge className="bg-primary text-primary-foreground text-xs px-2 py-0.5">
-                  {monthlyTarget.percentageIncrease} increase
-                </Badge>
+            
+            {/* Monthly Target integrated */}
+            <div className="flex flex-col items-center justify-center gap-1">
+              <TargetRing current={monthlyTarget.current} target={monthlyTarget.target} />
+              <div className="flex items-center gap-0.5 text-[10px] text-primary font-medium">
+                <ArrowUp className="h-2.5 w-2.5" />
+                {monthlyTarget.percentageIncrease}
               </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Section 4: SWOT Analysis */}
+      {/* SWOT Analysis */}
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2">SWOT Analysis</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">SWOT</h3>
         <SWOTGrid swot={swotAnalysis} />
       </div>
 
-      {/* Section 5: Marketing Recommendations */}
+      {/* Recommendations */}
       <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2">Marketing Recommendations</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-2">Actions</h3>
         <div className="space-y-2">
           {sortedRecommendations.map((rec, index) => (
             <RecommendationCard key={index} recommendation={rec} />
@@ -125,18 +187,18 @@ export function MarketingInsights({
         </div>
       </div>
 
-      {/* Section 6: Seasonal Tips - compact */}
+      {/* Seasonal Tips */}
       {seasonalTips && seasonalTips.length > 0 && (
         <div>
           <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
             <Calendar className="h-4 w-4 text-primary" />
-            Seasonal Tips
+            Seasonal
           </h3>
           <div className="grid gap-2 grid-cols-2">
             {seasonalTips.map((tip) => (
-              <div key={tip.month} className="bg-card border border-border rounded-lg p-3">
-                <h4 className="font-medium text-xs text-foreground mb-1">{tip.month}</h4>
-                <p className="text-xs text-muted-foreground line-clamp-2">{tip.tip}</p>
+              <div key={tip.month} className="bg-card border border-border rounded-lg p-2">
+                <span className="font-medium text-[10px] text-foreground">{tip.month}: </span>
+                <span className="text-[10px] text-muted-foreground">{tip.tip}</span>
               </div>
             ))}
           </div>
