@@ -47,8 +47,8 @@ export function MarketingInsights({
                 <TrendingUp className="h-4 w-4 text-primary" />
               </div>
               <div>
-                <h3 className="font-semibold text-sm text-foreground">Reputation Momentum</h3>
-                <p className="text-xs text-muted-foreground line-clamp-1">{improvingTrend.message}</p>
+                <h3 className="font-semibold text-sm text-foreground">Review Gap</h3>
+                <p className="text-xs text-muted-foreground">{improvingTrend.message}</p>
               </div>
             </div>
             <div className="flex gap-1.5 shrink-0">

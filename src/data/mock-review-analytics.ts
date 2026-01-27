@@ -157,7 +157,7 @@ export const mockReviewAnalyticsData: ReviewAnalyticsData = {
     }
   ],
   improvingTrend: {
-    message: "Your reviews are growing, but you need 266 more to match the market leader. At your current pace, that's 22 months away.",
+    message: "266 reviews behind leader. ~22 months to catch up at current pace.",
     behindBy: "266 reviews",
     percentile: "35th percentile"
   },
