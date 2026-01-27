@@ -25,6 +25,9 @@ const getPriorityStyles = (rank: number): {
   badgeClass: string; 
   cardClass: string;
   iconBgClass: string;
+  negativeCardClass: string;
+  negativeTextClass: string;
+  negativeBorderClass: string;
 } => {
   if (rank === 1) {
     return {
@@ -32,6 +35,9 @@ const getPriorityStyles = (rank: number): {
       badgeClass: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-0",
       cardClass: "border-l-4 border-l-red-400 bg-red-50/60 dark:bg-red-950/30",
       iconBgClass: "bg-red-100 dark:bg-red-900/30",
+      negativeCardClass: "bg-red-50/80 dark:bg-red-950/40",
+      negativeTextClass: "text-red-700 dark:text-red-400",
+      negativeBorderClass: "border-l-red-400",
     };
   } else if (rank <= 3) {
     return {
@@ -39,6 +45,9 @@ const getPriorityStyles = (rank: number): {
       badgeClass: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
       cardClass: "border-l-4 border-l-amber-300 bg-amber-50/40 dark:bg-amber-950/20",
       iconBgClass: "bg-amber-100 dark:bg-amber-900/30",
+      negativeCardClass: "bg-amber-50/80 dark:bg-amber-950/40",
+      negativeTextClass: "text-amber-700 dark:text-amber-400",
+      negativeBorderClass: "border-l-amber-400",
     };
   } else {
     return {
@@ -46,8 +55,24 @@ const getPriorityStyles = (rank: number): {
       badgeClass: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
       cardClass: "border-l-4 border-l-slate-300 bg-slate-100/50 dark:bg-slate-800/30",
       iconBgClass: "bg-slate-100 dark:bg-slate-800",
+      negativeCardClass: "bg-slate-100/80 dark:bg-slate-800/40",
+      negativeTextClass: "text-slate-600 dark:text-slate-400",
+      negativeBorderClass: "border-l-slate-400",
     };
   }
+};
+
+// Helper to calculate time ago
+const getTimeAgo = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  
+  if (diffInDays < 7) return `${diffInDays} days ago`;
+  if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
+  if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
+  return `${Math.floor(diffInDays / 365)} years ago`;
 };
 
 const StarRating = ({ rating, color = "orange" }: { rating: number; color?: "orange" | "green" }) => (
@@ -107,37 +132,39 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
           <CardContent className="pt-0 pb-4 px-4 space-y-3">
             {/* Two-column comparison */}
             <div className="grid md:grid-cols-2 gap-3">
-              {/* Patient's Experience */}
-              <Card className="border-l-4 border-l-amber-400 bg-muted/30 border-t-0 border-r-0 border-b-0">
+              {/* Patient's Experience - color matches priority */}
+              <Card className={cn("border-l-4 border-t-0 border-r-0 border-b-0", priorityStyles.negativeBorderClass, priorityStyles.negativeCardClass)}>
                 <CardContent className="p-3">
-                  <h4 className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-2">
+                  <h4 className={cn("text-xs font-semibold mb-2", priorityStyles.negativeTextClass)}>
                     Patient's Experience
                   </h4>
-                  <blockquote className="text-xs text-muted-foreground mb-2 leading-relaxed">
+                  <blockquote className="text-xs text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.userComplaint.quote}"
                   </blockquote>
                   <div className="flex items-center justify-between">
                     <StarRating rating={advantage.userComplaint.rating} />
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground text-right">
                       <span className="font-medium">{advantage.userComplaint.reviewerName}</span>
+                      <span className="mx-1">•</span>
+                      <span>{getTimeAgo(advantage.userComplaint.reviewDate)}</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Competitor's Approach */}
-              <Card className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-muted/30 border-t-0 border-r-0 border-b-0">
+              <Card className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-[hsl(var(--rating-positive))]/5 dark:bg-[hsl(var(--rating-positive))]/10 border-t-0 border-r-0 border-b-0">
                 <CardContent className="p-3">
                   <h4 className="text-xs font-semibold text-[hsl(var(--rating-positive))] mb-2">
                     How {advantage.competitorQuote.competitorName} Does It
                   </h4>
-                  <blockquote className="text-xs text-muted-foreground mb-2 leading-relaxed">
+                  <blockquote className="text-xs text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.competitorQuote.quote}"
                   </blockquote>
                   <div className="flex items-center justify-between">
                     <StarRating rating={5} color="green" />
                     <div className="text-xs text-muted-foreground">
-                      <span>{advantage.competitorQuote.reviewDate}</span>
+                      <span>{getTimeAgo(advantage.competitorQuote.reviewDate)}</span>
                     </div>
                   </div>
                 </CardContent>
