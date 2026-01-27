@@ -111,7 +111,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: Lightbulb,
       colorClass: "text-amber-500",
       score: 7.1,
-      insight: { label: "Up to 40% growth potential by capitalizing on seasonal trends", value: "+48 reviews/yr", trend: "up" },
+      insight: { label: "Up to 40% growth potential within 6 months by capitalizing on seasonal trends", value: "+48 reviews/yr", trend: "up" },
       actionLabel: "Automate follow-ups"
     },
     {
