@@ -179,29 +179,8 @@ export function MarketingInsights({
             </div>
           </div>
 
-          {/* SECTION 2: Review Gap */}
+          {/* SECTION 2: Monthly Target + Stats + Trend */}
           <div className="p-4">
-            {/* Header row */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-                  <TrendingUp className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-sm text-foreground">Review Gap</h3>
-                  <p className="text-xs text-muted-foreground">{improvingTrend.message}</p>
-                </div>
-              </div>
-              <div className="flex gap-1.5 shrink-0">
-                <Badge variant="outline" className="bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5">
-                  Behind by {improvingTrend.behindBy}
-                </Badge>
-                <Badge variant="outline" className="bg-muted text-muted-foreground border-0 text-xs px-2 py-0.5">
-                  {improvingTrend.percentile}
-                </Badge>
-              </div>
-            </div>
-
             {/* Monthly Target + Action Stats + Trend Chart Row */}
             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border">
               {/* Monthly Target with Progress */}
