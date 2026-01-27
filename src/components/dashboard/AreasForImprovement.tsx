@@ -1,4 +1,4 @@
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ShieldAlert, Receipt, Heart, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { ImprovementCard } from "./ImprovementCard";
@@ -8,12 +8,12 @@ interface AreasForImprovementProps {
   data: CompetitiveComparison;
 }
 
-// Emoji mapping for categories
-const categoryEmojis: Record<string, string> = {
-  "Overtreatment Concerns / Trust": "🛡️",
-  "Billing & Insurance Transparency": "💳",
-  "Dentist Anxiety & Emotional Comfort": "💆",
-  "Wait Times & Scheduling": "⏰",
+// Icon mapping for categories
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  "shield-alert": ShieldAlert,
+  "receipt": Receipt,
+  "heart": Heart,
+  "clock": Clock,
 };
 
 export function AreasForImprovement({ data }: AreasForImprovementProps) {
@@ -25,12 +25,12 @@ export function AreasForImprovement({ data }: AreasForImprovementProps) {
       <Card className="bg-card border-border shadow-sm">
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+            <div className="p-3 rounded-xl bg-amber-100 dark:bg-amber-900/30">
               <AlertCircle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-foreground mb-2">
-                📊 Areas for Improvement
+                Areas for Improvement
               </h2>
               <p className="text-muted-foreground mb-4">
                 These insights are based on patient reviews and competitor analysis
@@ -39,14 +39,14 @@ export function AreasForImprovement({ data }: AreasForImprovementProps) {
               {/* Quick-Access Chips */}
               <div className="flex flex-wrap gap-2">
                 {topCategories.map((advantage) => {
-                  const emoji = categoryEmojis[advantage.category] || "📌";
+                  const Icon = iconMap[advantage.icon] || AlertCircle;
                   return (
                     <Badge
                       key={advantage.category}
                       variant="outline"
                       className="bg-muted hover:bg-muted/80 cursor-pointer transition-colors border-border text-foreground px-3 py-1.5"
                     >
-                      <span className="mr-1.5">{emoji}</span>
+                      <Icon className="h-3.5 w-3.5 mr-1.5 text-amber-600 dark:text-amber-400" />
                       {advantage.category}
                     </Badge>
                   );
