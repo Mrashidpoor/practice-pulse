@@ -124,79 +124,38 @@ export function MarketingScoreCard({
             </div>
           </div>
 
-          {/* Key Insights - Redesigned */}
-          <div className="w-56 px-4 py-3 border-l border-border bg-muted/20">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-1 rounded-md bg-primary/10">
-                <Target className="h-3.5 w-3.5 text-primary" />
-              </div>
-              <span className="text-sm font-semibold text-foreground">Key Insights</span>
-            </div>
-            
-            <div className="space-y-2">
-              {/* Market Average Insight */}
-              <div className={cn(
-                "flex items-center gap-2.5 p-2 rounded-lg",
+          {/* Key Insights - Compact inline badges */}
+          <div className="w-44 px-4 py-3 border-l border-border flex flex-col justify-center gap-2">
+            <Badge 
+              variant="outline" 
+              className={cn(
+                "justify-start gap-1.5 py-1 px-2 border-0 text-xs font-medium",
                 isAboveAvg 
-                  ? "bg-[hsl(var(--rating-positive))]/10" 
-                  : "bg-amber-500/10"
-              )}>
-                <div className={cn(
-                  "p-1 rounded-md shrink-0",
-                  isAboveAvg 
-                    ? "bg-[hsl(var(--rating-positive))]/20" 
-                    : "bg-amber-500/20"
-                )}>
-                  <BarChart3 className={cn(
-                    "h-3 w-3",
-                    isAboveAvg ? "text-[hsl(var(--rating-positive))]" : "text-amber-600"
-                  )} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className={cn(
-                    "text-xs font-medium",
-                    isAboveAvg ? "text-[hsl(var(--rating-positive))]" : "text-amber-600"
-                  )}>
-                    {isAboveAvg ? "Above" : "Below"} Average
-                  </span>
-                  <p className="text-[10px] text-muted-foreground">
-                    Market avg: {avgScore.toFixed(1)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Gap to #1 Insight */}
-              {yourRank !== 1 && (
-                <div className="flex items-center gap-2.5 p-2 rounded-lg bg-primary/5">
-                  <div className="p-1 rounded-md bg-primary/10 shrink-0">
-                    <ArrowUp className="h-3 w-3 text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span className="text-xs font-medium text-primary">
-                      +{gapToFirst} to #1
-                    </span>
-                    <p className="text-[10px] text-muted-foreground">
-                      Points needed
-                    </p>
-                  </div>
-                </div>
+                  ? "bg-[hsl(var(--rating-positive))]/10 text-[hsl(var(--rating-positive))]" 
+                  : "bg-amber-500/10 text-amber-600"
               )}
-
-              {/* Focus Area */}
-              <div className="flex items-center gap-2.5 p-2 rounded-lg bg-muted/50">
-                <div className="p-1 rounded-md bg-muted shrink-0">
-                  <Zap className="h-3 w-3 text-foreground" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-xs font-medium text-foreground">
-                    Focus Areas
-                  </span>
-                  <p className="text-[10px] text-muted-foreground">
-                    Reviews & wait times
-                  </p>
-                </div>
-              </div>
-            </div>
+            >
+              <BarChart3 className="h-3 w-3" />
+              {isAboveAvg ? "Above" : "Below"} avg ({avgScore.toFixed(1)})
+            </Badge>
+            
+            {yourRank !== 1 && (
+              <Badge 
+                variant="outline" 
+                className="justify-start gap-1.5 py-1 px-2 border-0 text-xs font-medium bg-primary/10 text-primary"
+              >
+                <ArrowUp className="h-3 w-3" />
+                +{gapToFirst} pts to #1
+              </Badge>
+            )}
+            
+            <Badge 
+              variant="outline" 
+              className="justify-start gap-1.5 py-1 px-2 border-0 text-xs font-medium bg-muted text-muted-foreground"
+            >
+              <Zap className="h-3 w-3" />
+              Focus: Reviews
+            </Badge>
           </div>
         </div>
       </CardContent>
