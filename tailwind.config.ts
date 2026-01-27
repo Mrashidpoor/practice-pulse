@@ -47,6 +47,18 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        improvement: {
+          DEFAULT: "hsl(var(--improvement))",
+          foreground: "hsl(var(--improvement-foreground))",
+        },
+        strength: {
+          DEFAULT: "hsl(var(--strength))",
+          foreground: "hsl(var(--strength-foreground))",
+        },
+        metrics: {
+          DEFAULT: "hsl(var(--metrics))",
+          foreground: "hsl(var(--metrics-foreground))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

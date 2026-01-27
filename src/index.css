@@ -38,6 +38,14 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Dashboard semantic tokens */
+    --improvement: 45 93% 47%;
+    --improvement-foreground: 26 90% 30%;
+    --strength: 152 69% 41%;
+    --strength-foreground: 152 69% 20%;
+    --metrics: 213 94% 55%;
+    --metrics-foreground: 213 94% 95%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -83,6 +91,15 @@ All colors MUST be HSL.
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dashboard semantic tokens (dark) */
+    --improvement: 45 93% 55%;
+    --improvement-foreground: 45 93% 90%;
+    --strength: 152 69% 50%;
+    --strength-foreground: 152 69% 95%;
+    --metrics: 213 94% 60%;
+    --metrics-foreground: 213 94% 95%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
