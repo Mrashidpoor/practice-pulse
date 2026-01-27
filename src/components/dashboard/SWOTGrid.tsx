@@ -150,7 +150,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
   return (
     <Card className="bg-card border-border shadow-sm">
       <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <Target className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
