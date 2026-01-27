@@ -1,4 +1,4 @@
-import { Trophy, TrendingUp, TrendingDown, Target, Users } from "lucide-react";
+import { Trophy, TrendingUp, TrendingDown, Target, Users, BarChart3, Zap, ArrowUp } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -124,35 +124,77 @@ export function MarketingScoreCard({
             </div>
           </div>
 
-          {/* Key Insights */}
-          <div className="w-48 px-4 py-3 border-l border-border bg-muted/30">
-            <div className="flex items-center gap-1.5 mb-2">
-              <Target className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-medium text-foreground">Key Insights</span>
-            </div>
-            <div className="space-y-1.5">
-              <div className="flex items-start gap-1.5">
-                <span className={cn(
-                  "w-1 h-1 rounded-full mt-1.5 shrink-0",
-                  isAboveAvg ? "bg-[hsl(var(--rating-positive))]" : "bg-amber-500"
-                )} />
-                <span className="text-[10px] text-muted-foreground leading-tight">
-                  {isAboveAvg ? "Above market average" : "Below market average"} ({avgScore.toFixed(1)})
-                </span>
+          {/* Key Insights - Redesigned */}
+          <div className="w-56 px-4 py-3 border-l border-border bg-muted/20">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-1 rounded-md bg-primary/10">
+                <Target className="h-3.5 w-3.5 text-primary" />
               </div>
-              {yourRank !== 1 && (
-                <div className="flex items-start gap-1.5">
-                  <span className="w-1 h-1 rounded-full bg-primary mt-1.5 shrink-0" />
-                  <span className="text-[10px] text-muted-foreground leading-tight">
-                    {gapToFirst} points to reach #1
+              <span className="text-sm font-semibold text-foreground">Key Insights</span>
+            </div>
+            
+            <div className="space-y-2">
+              {/* Market Average Insight */}
+              <div className={cn(
+                "flex items-center gap-2.5 p-2 rounded-lg",
+                isAboveAvg 
+                  ? "bg-[hsl(var(--rating-positive))]/10" 
+                  : "bg-amber-500/10"
+              )}>
+                <div className={cn(
+                  "p-1 rounded-md shrink-0",
+                  isAboveAvg 
+                    ? "bg-[hsl(var(--rating-positive))]/20" 
+                    : "bg-amber-500/20"
+                )}>
+                  <BarChart3 className={cn(
+                    "h-3 w-3",
+                    isAboveAvg ? "text-[hsl(var(--rating-positive))]" : "text-amber-600"
+                  )} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className={cn(
+                    "text-xs font-medium",
+                    isAboveAvg ? "text-[hsl(var(--rating-positive))]" : "text-amber-600"
+                  )}>
+                    {isAboveAvg ? "Above" : "Below"} Average
                   </span>
+                  <p className="text-[10px] text-muted-foreground">
+                    Market avg: {avgScore.toFixed(1)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Gap to #1 Insight */}
+              {yourRank !== 1 && (
+                <div className="flex items-center gap-2.5 p-2 rounded-lg bg-primary/5">
+                  <div className="p-1 rounded-md bg-primary/10 shrink-0">
+                    <ArrowUp className="h-3 w-3 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-medium text-primary">
+                      +{gapToFirst} to #1
+                    </span>
+                    <p className="text-[10px] text-muted-foreground">
+                      Points needed
+                    </p>
+                  </div>
                 </div>
               )}
-              <div className="flex items-start gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-amber-500 mt-1.5 shrink-0" />
-                <span className="text-[10px] text-muted-foreground leading-tight">
-                  Focus: Reviews & wait times
-                </span>
+
+              {/* Focus Area */}
+              <div className="flex items-center gap-2.5 p-2 rounded-lg bg-muted/50">
+                <div className="p-1 rounded-md bg-muted shrink-0">
+                  <Zap className="h-3 w-3 text-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs font-medium text-foreground">
+                    Focus Areas
+                  </span>
+                  <p className="text-[10px] text-muted-foreground">
+                    Reviews & wait times
+                  </p>
+                </div>
               </div>
             </div>
           </div>
