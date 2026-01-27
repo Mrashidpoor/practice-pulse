@@ -1,6 +1,4 @@
 import { AlertCircle, ShieldAlert, Receipt, Heart, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { ImprovementCard } from "./ImprovementCard";
 import type { CompetitiveComparison } from "@/types/review-analytics";
 
@@ -21,41 +19,41 @@ export function AreasForImprovement({ data }: AreasForImprovementProps) {
 
   return (
     <div className="space-y-4">
-      {/* Header Card */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-5">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/30">
-              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-base font-semibold text-foreground mb-1">
-                Areas for Improvement
-              </h2>
-              <p className="text-sm text-muted-foreground mb-3">
-                These insights are based on patient reviews and competitor analysis
-              </p>
-              
-              {/* Quick-Access Chips */}
-              <div className="flex flex-wrap gap-1.5">
-                {topCategories.map((advantage) => {
-                  const Icon = iconMap[advantage.icon] || AlertCircle;
-                  return (
-                    <Badge
-                      key={advantage.category}
-                      variant="outline"
-                      className="bg-background hover:bg-muted cursor-pointer transition-colors border-border text-foreground text-xs px-2.5 py-1"
-                    >
-                      <Icon className="h-3 w-3 mr-1 text-amber-600 dark:text-amber-400" />
-                      {advantage.category}
-                    </Badge>
-                  );
-                })}
-              </div>
-            </div>
+      {/* Header Section - cleaner inline design */}
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-full bg-amber-100 dark:bg-amber-900/30">
+            <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
           </div>
-        </CardContent>
-      </Card>
+          <div>
+            <h2 className="text-base font-semibold text-foreground">
+              Areas for Improvement
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Based on patient reviews and competitor analysis
+            </p>
+          </div>
+        </div>
+        
+        {/* Quick-Access Chips - horizontal scroll on mobile */}
+        <div className="flex flex-wrap gap-2">
+          {topCategories.map((advantage) => {
+            const Icon = iconMap[advantage.icon] || AlertCircle;
+            return (
+              <button
+                key={advantage.category}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card border border-border hover:bg-muted transition-colors text-sm text-foreground shadow-sm"
+              >
+                <Icon className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
+                <span>{advantage.category}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="border-t border-border" />
 
       {/* Improvement Cards - tighter spacing */}
       <div className="space-y-2">
