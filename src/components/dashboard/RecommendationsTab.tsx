@@ -15,38 +15,44 @@ interface RecommendationsTabProps {
 
 const priorityConfig = {
   high: {
-    badge: "bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-600 border-red-500/30",
-    glow: "shadow-red-500/20",
-    ring: "ring-red-500/30",
-    gradient: "from-red-500/10 via-orange-500/5 to-transparent",
-    icon: "text-red-500",
+    badge: "bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-[hsl(var(--rating-negative))]/30",
+    glow: "shadow-sm",
+    ring: "ring-[hsl(var(--rating-negative))]/20",
+    gradient: "from-[hsl(var(--rating-negative))]/5 to-transparent",
+    icon: "text-[hsl(var(--rating-negative))]",
+    iconBg: "bg-[hsl(var(--rating-negative))]/15",
     label: "HIGH PRIORITY",
     impactScore: 95,
+    bar: "bg-[hsl(var(--rating-negative))]",
   },
   medium: {
-    badge: "bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-amber-600 border-amber-500/30",
-    glow: "shadow-amber-500/20",
-    ring: "ring-amber-500/30",
-    gradient: "from-amber-500/10 via-yellow-500/5 to-transparent",
-    icon: "text-amber-500",
+    badge: "bg-[hsl(var(--rating-neutral))]/15 text-[hsl(var(--rating-neutral))] border-[hsl(var(--rating-neutral))]/30",
+    glow: "shadow-sm",
+    ring: "ring-[hsl(var(--rating-neutral))]/20",
+    gradient: "from-[hsl(var(--rating-neutral))]/5 to-transparent",
+    icon: "text-[hsl(var(--rating-neutral))]",
+    iconBg: "bg-[hsl(var(--rating-neutral))]/15",
     label: "MEDIUM",
     impactScore: 70,
+    bar: "bg-[hsl(var(--rating-neutral))]",
   },
   low: {
     badge: "bg-muted text-muted-foreground border-border",
-    glow: "shadow-muted/20",
+    glow: "shadow-sm",
     ring: "ring-muted/30",
-    gradient: "from-muted/30 via-muted/10 to-transparent",
+    gradient: "from-muted/20 to-transparent",
     icon: "text-muted-foreground",
+    iconBg: "bg-muted",
     label: "CONSIDER",
     impactScore: 45,
+    bar: "bg-muted-foreground/40",
   },
 };
 
 const timeframeConfig = {
-  "short-term": { label: "1-3 months", weeks: "4-12 weeks", color: "text-emerald-600 bg-emerald-500/10" },
-  "medium-term": { label: "3-6 months", weeks: "12-24 weeks", color: "text-blue-600 bg-blue-500/10" },
-  "long-term": { label: "6-12 months", weeks: "24-48 weeks", color: "text-purple-600 bg-purple-500/10" },
+  "short-term": { label: "1-3 months", weeks: "4-12 weeks", color: "text-[hsl(var(--rating-positive))] bg-[hsl(var(--rating-positive))]/10" },
+  "medium-term": { label: "3-6 months", weeks: "12-24 weeks", color: "text-primary bg-primary/10" },
+  "long-term": { label: "6-12 months", weeks: "24-48 weeks", color: "text-muted-foreground bg-muted" },
 };
 
 function getRecommendationIcon(title: string) {
@@ -84,12 +90,7 @@ function RecommendationCard({ recommendation, index }: { recommendation: Marketi
       )} />
       
       {/* Priority indicator bar */}
-      <div className={cn(
-        "absolute left-0 top-0 bottom-0 w-1",
-        recommendation.priority === "high" && "bg-gradient-to-b from-red-500 to-orange-500",
-        recommendation.priority === "medium" && "bg-gradient-to-b from-amber-500 to-yellow-500",
-        recommendation.priority === "low" && "bg-muted-foreground/30"
-      )} />
+      <div className={cn("absolute left-0 top-0 bottom-0 w-1", config.bar)} />
 
       <CardContent className="p-0">
         {/* Main header - always visible */}
@@ -97,15 +98,13 @@ function RecommendationCard({ recommendation, index }: { recommendation: Marketi
           {/* Animated icon container */}
           <div className={cn(
             "relative p-3 rounded-xl shrink-0 transition-transform duration-300 group-hover:scale-110",
-            recommendation.priority === "high" && "bg-gradient-to-br from-red-500/20 to-orange-500/20",
-            recommendation.priority === "medium" && "bg-gradient-to-br from-amber-500/20 to-yellow-500/20",
-            recommendation.priority === "low" && "bg-muted"
+            config.iconBg
           )}>
             <Icon className={cn("h-5 w-5", config.icon)} />
             {recommendation.priority === "high" && (
               <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--rating-negative))] opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-[hsl(var(--rating-negative))]" />
               </span>
             )}
           </div>
@@ -208,10 +207,10 @@ function SeasonalTipCard({ tip, index }: { tip: SeasonalTip; index: number }) {
   const Icon = monthIcons[tip.month] || Calendar;
 
   const gradients = [
-    "from-blue-500/20 via-cyan-500/10 to-transparent",
-    "from-pink-500/20 via-rose-500/10 to-transparent",
-    "from-emerald-500/20 via-green-500/10 to-transparent",
-    "from-purple-500/20 via-violet-500/10 to-transparent",
+    "from-primary/10 to-transparent",
+    "from-[hsl(var(--rating-negative))]/10 to-transparent",
+    "from-[hsl(var(--rating-positive))]/10 to-transparent",
+    "from-[hsl(var(--rating-neutral))]/10 to-transparent",
   ];
 
   return (
@@ -260,8 +259,8 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-500">{highPriorityCount}</div>
+            <div className="text-center">
+                <div className="text-2xl font-bold text-[hsl(var(--rating-negative))]">{highPriorityCount}</div>
                 <div className="text-[10px] text-muted-foreground uppercase">High Priority</div>
               </div>
               <div className="h-8 w-px bg-border" />
