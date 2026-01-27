@@ -78,20 +78,20 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
       <Card className={cn("border-border shadow-sm hover:shadow-md transition-shadow", priorityStyles.cardClass)}>
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
-            <div className="p-5 flex items-start gap-4">
-              <div className={cn("p-2.5 rounded-xl", priorityStyles.iconBgClass)}>
-                <Icon className="h-5 w-5 text-foreground" />
+            <div className="p-4 flex items-center gap-3">
+              <div className={cn("p-2 rounded-lg shrink-0", priorityStyles.iconBgClass)}>
+                <Icon className="h-4 w-4 text-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  <h3 className="font-semibold text-foreground">{advantage.category}</h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-semibold text-sm text-foreground">{advantage.category}</h3>
                   <Badge className={cn("text-xs shrink-0", priorityStyles.badgeClass)}>
                     {priorityStyles.label}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-2">{advantage.insight}</p>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{advantage.insight}</p>
               </div>
-              <div className="flex flex-col items-end gap-2 shrink-0">
+              <div className="flex items-center gap-3 shrink-0">
                 <span className="text-sm font-bold text-primary">#{rank}</span>
                 {isOpen ? (
                   <ChevronUp className="h-4 w-4 text-muted-foreground" />
@@ -104,36 +104,34 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <CardContent className="pt-0 pb-5 px-5 space-y-4">
+          <CardContent className="pt-0 pb-4 px-4 space-y-3">
             {/* Two-column comparison */}
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* Patient's Experience (Left - Amber/Orange accent) */}
+            <div className="grid md:grid-cols-2 gap-3">
+              {/* Patient's Experience */}
               <Card className="border-l-4 border-l-amber-400 bg-muted/30 border-t-0 border-r-0 border-b-0">
-                <CardContent className="p-4">
-                  <h4 className="text-sm font-semibold text-amber-600 dark:text-amber-400 mb-3">
+                <CardContent className="p-3">
+                  <h4 className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-2">
                     Patient's Experience
                   </h4>
-                  <blockquote className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                  <blockquote className="text-xs text-muted-foreground mb-2 leading-relaxed">
                     "{advantage.userComplaint.quote}"
                   </blockquote>
                   <div className="flex items-center justify-between">
                     <StarRating rating={advantage.userComplaint.rating} />
                     <div className="text-xs text-muted-foreground">
                       <span className="font-medium">{advantage.userComplaint.reviewerName}</span>
-                      <span className="mx-1">•</span>
-                      <span>{advantage.userComplaint.reviewDate}</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* Competitor's Approach (Right - Green accent) */}
+              {/* Competitor's Approach */}
               <Card className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-muted/30 border-t-0 border-r-0 border-b-0">
-                <CardContent className="p-4">
-                  <h4 className="text-sm font-semibold text-[hsl(var(--rating-positive))] mb-3">
+                <CardContent className="p-3">
+                  <h4 className="text-xs font-semibold text-[hsl(var(--rating-positive))] mb-2">
                     How {advantage.competitorQuote.competitorName} Does It
                   </h4>
-                  <blockquote className="text-sm text-muted-foreground mb-3 leading-relaxed">
+                  <blockquote className="text-xs text-muted-foreground mb-2 leading-relaxed">
                     "{advantage.competitorQuote.quote}"
                   </blockquote>
                   <div className="flex items-center justify-between">
@@ -146,19 +144,19 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
               </Card>
             </div>
 
-            {/* Recommendation - Shiny card with gradient */}
-            <Card className="relative overflow-hidden border-primary/30 shadow-md bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
-              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-pulse" />
-              <CardContent className="p-4 flex gap-3 relative">
-                <div className="p-2 rounded-lg bg-primary/15 shrink-0">
-                  <Lightbulb className="h-5 w-5 text-primary" />
+            {/* Recommendation - Shiny card */}
+            <Card className="relative overflow-hidden border-primary/40 shadow-md bg-gradient-to-br from-primary/10 via-primary/15 to-primary/10">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-pulse" />
+              <CardContent className="p-3 flex gap-2.5 relative">
+                <div className="p-1.5 rounded-md bg-primary/20 shrink-0">
+                  <Lightbulb className="h-4 w-4 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1.5">
+                  <h4 className="text-xs font-semibold text-foreground mb-0.5 flex items-center gap-1">
                     Recommendation
-                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    <Sparkles className="h-3 w-3 text-primary" />
                   </h4>
-                  <p className="text-sm text-muted-foreground">{advantage.competitorQuote.recommendation}</p>
+                  <p className="text-xs text-muted-foreground">{advantage.competitorQuote.recommendation}</p>
                 </div>
               </CardContent>
             </Card>
