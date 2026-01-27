@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { 
   Calendar, ChevronDown, Clock, Target, Users, Megaphone, Video, Heart, 
-  TrendingUp, Zap, CheckCircle, ArrowRight, Sparkles, DollarSign
+  TrendingUp, Zap, CheckCircle, ArrowRight, Sparkles, DollarSign, Info
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { MarketingRecommendation, SeasonalTip } from "@/types/review-analytics";
 
@@ -19,6 +20,7 @@ const priorityConfig = {
     icon: "text-[hsl(var(--rating-negative))]",
     iconBg: "bg-[hsl(var(--rating-negative))]/10",
     label: "HIGH PRIORITY",
+    impactScore: 95,
     bar: "bg-[hsl(var(--rating-negative))]",
   },
   medium: {
@@ -26,6 +28,7 @@ const priorityConfig = {
     icon: "text-[hsl(var(--rating-neutral))]",
     iconBg: "bg-[hsl(var(--rating-neutral))]/10",
     label: "MEDIUM",
+    impactScore: 70,
     bar: "bg-[hsl(var(--rating-neutral))]",
   },
   low: {
@@ -33,6 +36,7 @@ const priorityConfig = {
     icon: "text-muted-foreground",
     iconBg: "bg-muted",
     label: "CONSIDER",
+    impactScore: 45,
     bar: "bg-muted-foreground/40",
   },
 };
@@ -119,6 +123,21 @@ function RecommendationRow({ recommendation, isFirst, isLast }: RecommendationRo
           </div>
         </div>
 
+        {/* Impact score with tooltip */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="hidden sm:flex flex-col items-center gap-0.5 px-2 cursor-help">
+              <div className="text-lg font-bold text-foreground">{config.impactScore}</div>
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider flex items-center gap-0.5">
+                Impact
+                <Info className="h-2.5 w-2.5" />
+              </div>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="left" className="max-w-[200px]">
+            <p className="text-xs">Impact score based on priority level, potential reach, and implementation timeframe.</p>
+          </TooltipContent>
+        </Tooltip>
 
         {/* Chevron */}
         <ChevronDown className={cn(
@@ -210,7 +229,7 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
   });
 
   const highPriorityCount = recommendations.filter(r => r.priority === "high").length;
-  const quickWinsCount = recommendations.filter(r => r.timeframe === "short-term").length;
+  const totalImpactScore = sortedRecommendations.reduce((sum, r) => sum + priorityConfig[r.priority].impactScore, 0);
 
   return (
     <div className="space-y-4">
@@ -235,10 +254,20 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
                 <div className="text-[9px] text-muted-foreground uppercase tracking-wide">High Priority</div>
               </div>
               <div className="h-8 w-px bg-border" />
-              <div className="text-center">
-                <div className="text-xl font-bold text-[hsl(var(--rating-positive))]">{quickWinsCount}</div>
-                <div className="text-[9px] text-muted-foreground uppercase tracking-wide">Quick Wins</div>
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="text-center cursor-help">
+                    <div className="text-xl font-bold text-primary">{Math.round(totalImpactScore / recommendations.length)}</div>
+                    <div className="text-[9px] text-muted-foreground uppercase tracking-wide flex items-center gap-0.5 justify-center">
+                      Avg Impact
+                      <Info className="h-2.5 w-2.5" />
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-[220px]">
+                  <p className="text-xs">Average impact score across all recommendations. Based on priority, potential reach, and timeframe.</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </CardContent>
