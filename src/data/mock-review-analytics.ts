@@ -157,7 +157,7 @@ export const mockReviewAnalyticsData: ReviewAnalyticsData = {
     }
   ],
   improvingTrend: {
-    message: "Creative Dental of Queens is steadily improving its online reputation, but still trails the market leader.",
+    message: "Your reviews are growing, but you need 266 more to match the market leader. At your current pace, that's 22 months away.",
     behindBy: "266 reviews",
     percentile: "35th percentile"
   },
