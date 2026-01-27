@@ -93,8 +93,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: CheckCircle,
       colorClass: "text-[hsl(var(--rating-positive))]",
       score: 8.5,
-      insight: { label: "Staff praised 3x more than competitors", value: "Top 15%", trend: "up" },
-      actionLabel: "Leverage in marketing"
+      insight: { label: "99% positive sentiment vs 93% competitor average", value: "+6% ahead", trend: "up" },
+      actionLabel: "Feature in Google Ads"
     },
     {
       title: "Weaknesses", 
@@ -102,8 +102,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: XCircle,
       colorClass: "text-[hsl(var(--rating-negative))]",
       score: 4.2,
-      insight: { label: "Wait time mentioned in 23% of reviews", value: "-12% MoM", trend: "down" },
-      actionLabel: "Priority fix needed"
+      insight: { label: "266 fewer reviews than top competitor", value: "35th %ile", trend: "down" },
+      actionLabel: "Launch review campaign"
     },
     {
       title: "Opportunities",
@@ -111,8 +111,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: Lightbulb,
       colorClass: "text-[hsl(var(--rating-neutral))]",
       score: 7.1,
-      insight: { label: "Tax season drives 40% more searches", value: "Feb-Apr", trend: "up" },
-      actionLabel: "Plan campaign now"
+      insight: { label: "32% review increase needed to match competitor pace", value: "15/mo target", trend: "up" },
+      actionLabel: "Automate follow-ups"
     },
     {
       title: "Threats",
@@ -120,8 +120,8 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       icon: AlertTriangle,
       colorClass: "text-orange-500",
       score: 5.8,
-      insight: { label: "2 new competitors within 5 miles", value: "High Risk", trend: "down" },
-      actionLabel: "Monitor closely"
+      insight: { label: "Competitor gaining 5 more reviews/month on average", value: "~22mo gap", trend: "down" },
+      actionLabel: "Accelerate growth"
     }
   ];
   const overallScore = ((8.5 + (10 - 4.2) + 7.1 + (10 - 5.8)) / 4).toFixed(1);
