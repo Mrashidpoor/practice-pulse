@@ -1,5 +1,5 @@
-import { Clock, Megaphone, Video, Heart, TrendingUp, DollarSign, Users } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Clock, Target, Users, Megaphone, Video, Heart, Star, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import type { MarketingRecommendation } from "@/types/review-analytics";
 import { cn } from "@/lib/utils";
 
@@ -7,88 +7,75 @@ interface RecommendationCardProps {
   recommendation: MarketingRecommendation;
 }
 
-const priorityConfig = {
+const priorityStyles = {
   high: {
-    color: "text-[hsl(var(--rating-negative))]",
-    bg: "bg-[hsl(var(--rating-negative))]/10",
-    progress: 90,
-    label: "Urgent",
+    badge: "bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0",
+    iconBg: "bg-[hsl(var(--rating-negative))]/10",
+    iconColor: "text-[hsl(var(--rating-negative))]",
   },
   medium: {
-    color: "text-[hsl(var(--rating-neutral))]",
-    bg: "bg-[hsl(var(--rating-neutral))]/10",
-    progress: 60,
-    label: "Soon",
+    badge: "bg-[hsl(var(--rating-neutral))]/10 text-[hsl(var(--rating-neutral))] border-0",
+    iconBg: "bg-[hsl(var(--rating-neutral))]/10",
+    iconColor: "text-[hsl(var(--rating-neutral))]",
   },
   low: {
-    color: "text-muted-foreground",
-    bg: "bg-muted",
-    progress: 30,
-    label: "Plan",
+    badge: "bg-muted text-muted-foreground border-0",
+    iconBg: "bg-muted",
+    iconColor: "text-muted-foreground",
   },
 };
 
-const timeframeConfig = {
-  "short-term": { months: 3, label: "3mo" },
-  "medium-term": { months: 6, label: "6mo" },
-  "long-term": { months: 12, label: "12mo" },
+const timeframeLabels = {
+  "short-term": "1-3 mo",
+  "medium-term": "3-6 mo",
+  "long-term": "6-12 mo",
 };
 
-function getIcon(title: string) {
-  const t = title.toLowerCase();
-  if (t.includes("review")) return Megaphone;
-  if (t.includes("video") || t.includes("trust")) return Video;
-  if (t.includes("anxiety") || t.includes("comfort")) return Heart;
-  if (t.includes("price") || t.includes("billing")) return DollarSign;
-  if (t.includes("community") || t.includes("outreach")) return Users;
+// Map recommendation titles to icons
+function getRecommendationIcon(title: string) {
+  const titleLower = title.toLowerCase();
+  if (titleLower.includes("review")) return Megaphone;
+  if (titleLower.includes("video") || titleLower.includes("trust")) return Video;
+  if (titleLower.includes("anxiety") || titleLower.includes("comfort")) return Heart;
+  if (titleLower.includes("star") || titleLower.includes("rating")) return Star;
   return TrendingUp;
 }
 
 export function RecommendationCard({ recommendation }: RecommendationCardProps) {
-  const config = priorityConfig[recommendation.priority];
-  const timeframe = timeframeConfig[recommendation.timeframe];
-  const Icon = getIcon(recommendation.title);
+  const styles = priorityStyles[recommendation.priority];
+  const Icon = getRecommendationIcon(recommendation.title);
 
   return (
-    <div className="group relative bg-card border border-border rounded-xl p-4 hover:shadow-md transition-all cursor-pointer">
-      {/* Priority indicator bar */}
-      <div className={cn("absolute top-0 left-4 right-4 h-1 rounded-b-full", config.bg)}>
-        <div 
-          className={cn("h-full rounded-b-full transition-all", config.color.replace("text-", "bg-"))}
-          style={{ width: `${config.progress}%` }}
-        />
+    <div className="flex items-start gap-3 p-3 bg-card border border-border rounded-lg hover:bg-muted/30 transition-colors">
+      {/* Icon */}
+      <div className={cn("p-2 rounded-lg shrink-0", styles.iconBg)}>
+        <Icon className={cn("h-4 w-4", styles.iconColor)} />
       </div>
 
-      {/* Icon + Title */}
-      <div className="flex items-center gap-3 mt-2">
-        <div className={cn("p-2.5 rounded-xl", config.bg)}>
-          <Icon className={cn("h-5 w-5", config.color)} />
+      {/* Content */}
+      <div className="flex-1 min-w-0 space-y-1.5">
+        <div className="flex items-center gap-2 flex-wrap">
+          <h4 className="font-semibold text-sm text-foreground truncate">{recommendation.title}</h4>
+          <Badge className={cn("text-[10px] uppercase px-1.5 py-0", styles.badge)}>
+            {recommendation.priority}
+          </Badge>
+          <Badge variant="outline" className="text-[10px] bg-muted border-0 px-1.5 py-0">
+            <Clock className="h-2.5 w-2.5 mr-0.5" />
+            {timeframeLabels[recommendation.timeframe]}
+          </Badge>
         </div>
-        <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-foreground leading-tight line-clamp-2">
-            {recommendation.title}
-          </h4>
+        
+        {/* Compact metrics row */}
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <span className="flex items-center gap-1">
+            <Target className="h-3 w-3 text-primary shrink-0" />
+            <span className="truncate">{recommendation.impact}</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <Users className="h-3 w-3 text-primary shrink-0" />
+            <span className="truncate">{recommendation.audience}</span>
+          </span>
         </div>
-      </div>
-
-      {/* Visual timeline */}
-      <div className="mt-4 flex items-center gap-2">
-        <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-primary rounded-full"
-            style={{ width: `${(timeframe.months / 12) * 100}%` }}
-          />
-        </div>
-        <span className="text-[10px] font-medium text-muted-foreground">{timeframe.label}</span>
-      </div>
-
-      {/* Priority badge */}
-      <div className={cn(
-        "absolute top-3 right-3 text-[9px] font-bold uppercase px-1.5 py-0.5 rounded",
-        config.bg, config.color
-      )}>
-        {config.label}
       </div>
     </div>
   );
