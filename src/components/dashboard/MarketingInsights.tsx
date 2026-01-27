@@ -82,7 +82,9 @@ export function MarketingInsights({
             <div className="px-4 first:pl-0 last:pr-0">
               <SentimentBreakdown 
                 positive={metrics.positiveReviews12Mo} 
-                total={metrics.last12MonthsReviews} 
+                total={metrics.last12MonthsReviews}
+                competitorPositive={metrics.positiveReviews12MoCompetitor}
+                competitorTotal={metrics.last12MonthsReviewsCompetitor}
               />
             </div>
             <div className="px-4 first:pl-0 last:pr-0">
