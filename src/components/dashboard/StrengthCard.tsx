@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, CheckCircle, Quote, Star, UserCheck, Smile } from "lucide-react";
+import { ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Quote, Star, Heart, Sparkles, Clock, HandHeart, DollarSign, Microscope, Baby, Siren, MapPin, MessageCircle, Award, Users, Stethoscope } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -10,28 +10,22 @@ interface StrengthCardProps {
   strength: ClinicStrength;
 }
 
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  "user-check": UserCheck,
-  "star": Star,
-  "smile": Smile,
-};
-
-// Map strength categories to relevant emojis
-function getCategoryEmoji(category: string): string {
+// Map strength categories to relevant Lucide icons
+function getCategoryIcon(category: string): React.ComponentType<{ className?: string }> {
   const cat = category.toLowerCase();
-  if (cat.includes("chairside") || cat.includes("manner") || cat.includes("bedside")) return "🤝";
-  if (cat.includes("quality") || cat.includes("dental work") || cat.includes("procedure")) return "🦷";
-  if (cat.includes("friendly") || cat.includes("staff") || cat.includes("team")) return "😊";
-  if (cat.includes("clean") || cat.includes("hygiene") || cat.includes("sanit")) return "✨";
-  if (cat.includes("wait") || cat.includes("time") || cat.includes("punctual")) return "⏱️";
-  if (cat.includes("pain") || cat.includes("comfort") || cat.includes("gentle")) return "💆";
-  if (cat.includes("price") || cat.includes("billing") || cat.includes("afford")) return "💰";
-  if (cat.includes("technology") || cat.includes("modern") || cat.includes("equipment")) return "🔬";
-  if (cat.includes("child") || cat.includes("kid") || cat.includes("pediatric")) return "👶";
-  if (cat.includes("emergency") || cat.includes("urgent")) return "🚨";
-  if (cat.includes("location") || cat.includes("parking") || cat.includes("access")) return "📍";
-  if (cat.includes("communication") || cat.includes("explain")) return "💬";
-  return "⭐";
+  if (cat.includes("chairside") || cat.includes("manner") || cat.includes("bedside")) return Heart;
+  if (cat.includes("quality") || cat.includes("dental work") || cat.includes("procedure")) return Stethoscope;
+  if (cat.includes("friendly") || cat.includes("staff") || cat.includes("team")) return Users;
+  if (cat.includes("clean") || cat.includes("hygiene") || cat.includes("sanit")) return Sparkles;
+  if (cat.includes("wait") || cat.includes("time") || cat.includes("punctual")) return Clock;
+  if (cat.includes("pain") || cat.includes("comfort") || cat.includes("gentle")) return HandHeart;
+  if (cat.includes("price") || cat.includes("billing") || cat.includes("afford")) return DollarSign;
+  if (cat.includes("technology") || cat.includes("modern") || cat.includes("equipment")) return Microscope;
+  if (cat.includes("child") || cat.includes("kid") || cat.includes("pediatric")) return Baby;
+  if (cat.includes("emergency") || cat.includes("urgent")) return Siren;
+  if (cat.includes("location") || cat.includes("parking") || cat.includes("access")) return MapPin;
+  if (cat.includes("communication") || cat.includes("explain")) return MessageCircle;
+  return Award;
 }
 
 const StarRating = ({ rating }: { rating: number }) => (
@@ -71,7 +65,7 @@ const getTimeAgo = (dateString: string): string => {
 export function StrengthCard({ strength }: StrengthCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
-  const Icon = iconMap[strength.icon] || CheckCircle;
+  const CategoryIcon = getCategoryIcon(strength.category);
   const feedback = strength.patientFeedback[currentQuoteIndex];
   const hasMultipleQuotes = strength.patientFeedback.length > 1;
 
@@ -87,16 +81,14 @@ export function StrengthCard({ strength }: StrengthCardProps) {
     );
   };
 
-  const categoryEmoji = getCategoryEmoji(strength.category);
-
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <Card className="bg-card border-border shadow-sm border-l-4 border-l-[hsl(var(--rating-positive))] hover:shadow-md transition-shadow">
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0 text-xl">
-                {categoryEmoji}
+              <div className="p-2.5 rounded-lg bg-amber-100 shrink-0">
+                <CategoryIcon className="h-5 w-5 text-amber-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-foreground">
