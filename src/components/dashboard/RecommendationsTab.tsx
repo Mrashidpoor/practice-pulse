@@ -56,6 +56,64 @@ const timeframeConfig = {
   "long-term": { label: "6-12 months", color: "text-muted-foreground bg-muted" },
 };
 
+type Range = { min: number; max: number };
+
+function clamp(n: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, n));
+}
+
+// Deterministic (no randomness) small variation per recommendation so cards don't all show identical ranges.
+function hashString(input: string) {
+  let h = 0;
+  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+function applyJitter(range: Range, jitterPct: number): Range {
+  const min = range.min * (1 + jitterPct);
+  const max = range.max * (1 + jitterPct);
+  return { min: Math.min(min, max), max: Math.max(min, max) };
+}
+
+function formatRange(range: Range, suffix = "") {
+  return `${Math.round(range.min)}-${Math.round(range.max)}${suffix}`;
+}
+
+function estimateRecommendationProjection(rec: MarketingRecommendation) {
+  const base = {
+    high: { perf: { min: 25, max: 40 }, patients: { min: 15, max: 25 }, reach: 3 },
+    medium: { perf: { min: 15, max: 25 }, patients: { min: 8, max: 15 }, reach: 2 },
+    low: { perf: { min: 5, max: 15 }, patients: { min: 3, max: 8 }, reach: 1.5 },
+  }[rec.priority];
+
+  const timeframeMultiplier = {
+    "short-term": 1.0,
+    "medium-term": 0.9,
+    "long-term": 0.8,
+  }[rec.timeframe];
+
+  const jitterSeed = hashString(`${rec.title}|${rec.impact}|${rec.audience}`) % 21; // 0..20
+  const jitterPct = (jitterSeed - 10) / 100; // -0.10 .. +0.10
+
+  const perf = applyJitter(
+    { min: base.perf.min * timeframeMultiplier, max: base.perf.max * timeframeMultiplier },
+    jitterPct,
+  );
+  const patients = applyJitter(
+    { min: base.patients.min * timeframeMultiplier, max: base.patients.max * timeframeMultiplier },
+    jitterPct,
+  );
+
+  const reach = clamp(base.reach * (1 + jitterPct / 2), 1.2, 3.5);
+  const reachLabel = `${reach.toFixed(1).replace(/\.0$/, "")}x`;
+
+  return {
+    performanceLabel: `+${formatRange(perf, "%")}`,
+    newPatientsLabel: formatRange(patients),
+    reachLabel,
+  };
+}
+
 function getRecommendationIcon(title: string) {
   const titleLower = title.toLowerCase();
   if (titleLower.includes("review")) return Megaphone;
@@ -74,6 +132,7 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
   const config = priorityConfig[recommendation.priority];
   const timeframe = timeframeConfig[recommendation.timeframe];
   const Icon = getRecommendationIcon(recommendation.title);
+  const projection = estimateRecommendationProjection(recommendation);
   
   const actionSteps = recommendation.description.split('. ').filter(s => s.length > 0);
 
@@ -123,15 +182,15 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
         {/* Impact metrics */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <div className="flex flex-col items-center px-2 border-r border-border">
-            <div className="text-sm font-bold text-[hsl(var(--rating-positive))]">+{config.marketingBoost}</div>
+            <div className="text-sm font-bold text-[hsl(var(--rating-positive))]">{projection.performanceLabel}</div>
             <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Performance</div>
           </div>
           <div className="flex flex-col items-center px-2 border-r border-border">
-            <div className="text-sm font-bold text-primary">{config.newPatients}</div>
+            <div className="text-sm font-bold text-primary">{projection.newPatientsLabel}</div>
             <div className="text-[8px] text-muted-foreground uppercase tracking-wider">New Patients</div>
           </div>
           <div className="flex flex-col items-center px-2">
-            <div className="text-sm font-bold text-foreground">{config.reachMultiplier}</div>
+            <div className="text-sm font-bold text-foreground">{projection.reachLabel}</div>
             <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Reach</div>
           </div>
         </div>
