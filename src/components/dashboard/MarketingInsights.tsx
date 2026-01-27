@@ -2,6 +2,7 @@ import { TrendingUp, Target, Calendar } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MetricCard } from "./MetricCard";
+import { SentimentBreakdown } from "./SentimentBreakdown";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
@@ -79,10 +80,9 @@ export function MarketingInsights({
               />
             </div>
             <div className="px-4 first:pl-0 last:pr-0">
-              <MetricCard
-                title="Positive (12 Mo)"
-                yourValue={metrics.positiveReviews12Mo}
-                competitorValue={metrics.positiveReviews12MoCompetitor}
+              <SentimentBreakdown 
+                positive={metrics.positiveReviews12Mo} 
+                total={metrics.last12MonthsReviews} 
               />
             </div>
             <div className="px-4 first:pl-0 last:pr-0">
