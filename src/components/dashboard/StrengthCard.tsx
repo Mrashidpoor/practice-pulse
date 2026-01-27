@@ -10,22 +10,22 @@ interface StrengthCardProps {
   strength: ClinicStrength;
 }
 
-// Map strength categories to relevant Lucide icons
-function getCategoryIcon(category: string): React.ComponentType<{ className?: string }> {
+// Map strength categories to relevant Lucide icons and their colors
+function getCategoryIcon(category: string): { icon: React.ComponentType<{ className?: string }>, color: string } {
   const cat = category.toLowerCase();
-  if (cat.includes("chairside") || cat.includes("manner") || cat.includes("bedside")) return Heart;
-  if (cat.includes("quality") || cat.includes("dental work") || cat.includes("procedure")) return Stethoscope;
-  if (cat.includes("friendly") || cat.includes("staff") || cat.includes("team")) return Users;
-  if (cat.includes("clean") || cat.includes("hygiene") || cat.includes("sanit")) return Sparkles;
-  if (cat.includes("wait") || cat.includes("time") || cat.includes("punctual")) return Clock;
-  if (cat.includes("pain") || cat.includes("comfort") || cat.includes("gentle")) return HandHeart;
-  if (cat.includes("price") || cat.includes("billing") || cat.includes("afford")) return DollarSign;
-  if (cat.includes("technology") || cat.includes("modern") || cat.includes("equipment")) return Microscope;
-  if (cat.includes("child") || cat.includes("kid") || cat.includes("pediatric")) return Baby;
-  if (cat.includes("emergency") || cat.includes("urgent")) return Siren;
-  if (cat.includes("location") || cat.includes("parking") || cat.includes("access")) return MapPin;
-  if (cat.includes("communication") || cat.includes("explain")) return MessageCircle;
-  return Award;
+  if (cat.includes("chairside") || cat.includes("manner") || cat.includes("bedside")) return { icon: Heart, color: "text-red-500" };
+  if (cat.includes("quality") || cat.includes("dental work") || cat.includes("procedure")) return { icon: Stethoscope, color: "text-blue-500" };
+  if (cat.includes("friendly") || cat.includes("staff") || cat.includes("team")) return { icon: Users, color: "text-amber-500" };
+  if (cat.includes("clean") || cat.includes("hygiene") || cat.includes("sanit")) return { icon: Sparkles, color: "text-cyan-500" };
+  if (cat.includes("wait") || cat.includes("time") || cat.includes("punctual")) return { icon: Clock, color: "text-purple-500" };
+  if (cat.includes("pain") || cat.includes("comfort") || cat.includes("gentle")) return { icon: HandHeart, color: "text-pink-500" };
+  if (cat.includes("price") || cat.includes("billing") || cat.includes("afford")) return { icon: DollarSign, color: "text-emerald-500" };
+  if (cat.includes("technology") || cat.includes("modern") || cat.includes("equipment")) return { icon: Microscope, color: "text-indigo-500" };
+  if (cat.includes("child") || cat.includes("kid") || cat.includes("pediatric")) return { icon: Baby, color: "text-orange-500" };
+  if (cat.includes("emergency") || cat.includes("urgent")) return { icon: Siren, color: "text-red-600" };
+  if (cat.includes("location") || cat.includes("parking") || cat.includes("access")) return { icon: MapPin, color: "text-teal-500" };
+  if (cat.includes("communication") || cat.includes("explain")) return { icon: MessageCircle, color: "text-sky-500" };
+  return { icon: Award, color: "text-amber-500" };
 }
 
 const StarRating = ({ rating }: { rating: number }) => (
@@ -65,7 +65,7 @@ const getTimeAgo = (dateString: string): string => {
 export function StrengthCard({ strength }: StrengthCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
-  const CategoryIcon = getCategoryIcon(strength.category);
+  const { icon: CategoryIcon, color: iconColor } = getCategoryIcon(strength.category);
   const feedback = strength.patientFeedback[currentQuoteIndex];
   const hasMultipleQuotes = strength.patientFeedback.length > 1;
 
@@ -87,8 +87,8 @@ export function StrengthCard({ strength }: StrengthCardProps) {
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-4 flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-amber-100 shrink-0">
-                <CategoryIcon className="h-5 w-5 text-amber-600" />
+              <div className="p-2.5 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0">
+                <CategoryIcon className={cn("h-5 w-5", iconColor)} />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-foreground">
