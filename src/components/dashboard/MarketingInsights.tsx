@@ -62,36 +62,48 @@ export function MarketingInsights({
         </CardContent>
       </Card>
 
-      {/* Section 2: Review Metrics Grid - compact 2x2 */}
-      <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-1.5">
-          <BarChart3 className="h-4 w-4 text-primary" />
-          Review Metrics
-        </h3>
-        <div className="grid gap-2 grid-cols-2">
-          <MetricCard
-            title="Total Reviews"
-            yourValue={metrics.totalReviews}
-            competitorValue={metrics.totalReviewsCompetitor}
-          />
-          <MetricCard
-            title="Last 12 Mo"
-            yourValue={metrics.last12MonthsReviews}
-            competitorValue={metrics.last12MonthsReviewsCompetitor}
-          />
-          <MetricCard
-            title="Positive (12 Mo)"
-            yourValue={metrics.positiveReviews12Mo}
-            competitorValue={metrics.positiveReviews12MoCompetitor}
-          />
-          <MetricCard
-            title="Positive Rate"
-            yourValue={metrics.positiveRate}
-            competitorValue={metrics.positiveRateCompetitor}
-            type="percentage"
-          />
-        </div>
-      </div>
+      {/* Section 2: Review Metrics - single row with pie charts */}
+      <Card className="bg-card border-border shadow-sm">
+        <CardContent className="p-3">
+          <div className="flex items-center gap-2 mb-3">
+            <BarChart3 className="h-4 w-4 text-primary" />
+            <h3 className="text-sm font-semibold text-foreground">Review Metrics</h3>
+            <div className="ml-auto flex items-center gap-2 text-[10px]">
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-[hsl(var(--rating-positive))]" />
+                You
+              </span>
+              <span className="flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-muted" />
+                Competitor
+              </span>
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            <MetricCard
+              title="Total Reviews"
+              yourValue={metrics.totalReviews}
+              competitorValue={metrics.totalReviewsCompetitor}
+            />
+            <MetricCard
+              title="Last 12 Mo"
+              yourValue={metrics.last12MonthsReviews}
+              competitorValue={metrics.last12MonthsReviewsCompetitor}
+            />
+            <MetricCard
+              title="Positive (12 Mo)"
+              yourValue={metrics.positiveReviews12Mo}
+              competitorValue={metrics.positiveReviews12MoCompetitor}
+            />
+            <MetricCard
+              title="Positive Rate"
+              yourValue={metrics.positiveRate}
+              competitorValue={metrics.positiveRateCompetitor}
+              type="percentage"
+            />
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Section 3: Monthly Review Target - compact inline */}
       <Card className="bg-card border-border shadow-sm">
