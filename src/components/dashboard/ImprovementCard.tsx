@@ -19,22 +19,33 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "user-check": User,
 };
 
-// Priority tag based on rank
-const getPriorityTag = (rank: number): { label: string; className: string } => {
+// Priority styling based on rank
+const getPriorityStyles = (rank: number): { 
+  label: string; 
+  badgeClass: string; 
+  cardClass: string;
+  iconBgClass: string;
+} => {
   if (rank === 1) {
     return {
       label: "Important",
-      className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
+      badgeClass: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
+      cardClass: "border-l-4 border-l-amber-400 bg-amber-50/50 dark:bg-amber-950/20",
+      iconBgClass: "bg-amber-100 dark:bg-amber-900/30",
     };
   } else if (rank <= 3) {
     return {
       label: "Needs Improvement",
-      className: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 border-0",
+      badgeClass: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 border-0",
+      cardClass: "border-l-4 border-l-orange-300 bg-orange-50/30 dark:bg-orange-950/10",
+      iconBgClass: "bg-orange-100 dark:bg-orange-900/30",
     };
   } else {
     return {
       label: "Consider",
-      className: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
+      badgeClass: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
+      cardClass: "border-l-4 border-l-slate-300 bg-slate-50/30 dark:bg-slate-800/20",
+      iconBgClass: "bg-slate-100 dark:bg-slate-800",
     };
   }
 };
@@ -60,22 +71,22 @@ const StarRating = ({ rating, color = "orange" }: { rating: number; color?: "ora
 export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const Icon = iconMap[advantage.icon] || ShieldAlert;
-  const priorityTag = getPriorityTag(rank);
+  const priorityStyles = getPriorityStyles(rank);
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <Card className="bg-card border-border shadow-sm hover:shadow-md transition-shadow">
+      <Card className={cn("border-border shadow-sm hover:shadow-md transition-shadow", priorityStyles.cardClass)}>
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-5 flex items-start gap-4">
-              <div className="p-2.5 rounded-xl bg-muted">
-                <Icon className="h-5 w-5 text-primary" />
+              <div className={cn("p-2.5 rounded-xl", priorityStyles.iconBgClass)}>
+                <Icon className="h-5 w-5 text-foreground" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                   <h3 className="font-semibold text-foreground">{advantage.category}</h3>
-                  <Badge className={cn("text-xs shrink-0", priorityTag.className)}>
-                    {priorityTag.label}
+                  <Badge className={cn("text-xs shrink-0", priorityStyles.badgeClass)}>
+                    {priorityStyles.label}
                   </Badge>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2">{advantage.insight}</p>
