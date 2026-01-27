@@ -63,28 +63,36 @@ export function MarketingInsights({
           </div>
 
           {/* Metrics row */}
-          <div className="grid grid-cols-4 gap-6 pt-4 border-t border-border">
-            <MetricCard
-              title="Total Reviews"
-              yourValue={metrics.totalReviews}
-              competitorValue={metrics.totalReviewsCompetitor}
-            />
-            <MetricCard
-              title="Last 12 Mo"
-              yourValue={metrics.last12MonthsReviews}
-              competitorValue={metrics.last12MonthsReviewsCompetitor}
-            />
-            <MetricCard
-              title="Positive (12 Mo)"
-              yourValue={metrics.positiveReviews12Mo}
-              competitorValue={metrics.positiveReviews12MoCompetitor}
-            />
-            <MetricCard
-              title="Positive Rate"
-              yourValue={metrics.positiveRate}
-              competitorValue={metrics.positiveRateCompetitor}
-              type="percentage"
-            />
+          <div className="grid grid-cols-4 divide-x divide-border/50 pt-4 border-t border-border">
+            <div className="px-4 first:pl-0 last:pr-0">
+              <MetricCard
+                title="Total Reviews"
+                yourValue={metrics.totalReviews}
+                competitorValue={metrics.totalReviewsCompetitor}
+              />
+            </div>
+            <div className="px-4 first:pl-0 last:pr-0">
+              <MetricCard
+                title="Last 12 Mo"
+                yourValue={metrics.last12MonthsReviews}
+                competitorValue={metrics.last12MonthsReviewsCompetitor}
+              />
+            </div>
+            <div className="px-4 first:pl-0 last:pr-0">
+              <MetricCard
+                title="Positive (12 Mo)"
+                yourValue={metrics.positiveReviews12Mo}
+                competitorValue={metrics.positiveReviews12MoCompetitor}
+              />
+            </div>
+            <div className="px-4 first:pl-0 last:pr-0">
+              <MetricCard
+                title="Positive Rate"
+                yourValue={metrics.positiveRate}
+                competitorValue={metrics.positiveRateCompetitor}
+                type="percentage"
+              />
+            </div>
           </div>
 
           {/* Monthly Target + Trend Chart Row */}
