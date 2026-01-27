@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { MetricCard } from "./MetricCard";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import type {
   ImprovingTrend,
   ReviewMetrics,
@@ -37,7 +38,7 @@ export function MarketingInsights({
 
   return (
     <div className="space-y-4">
-      {/* Combined: Reputation Momentum + Review Metrics */}
+      {/* Combined: Review Gap + Metrics + Monthly Target + Trend Chart */}
       <Card className="bg-card border-border shadow-sm">
         <CardContent className="p-4">
           {/* Header row */}
@@ -85,26 +86,84 @@ export function MarketingInsights({
               type="percentage"
             />
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Monthly Review Target */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-3">
-          <div className="flex items-center gap-3">
-            <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
-              <Target className="h-4 w-4 text-primary" />
-            </div>
-            <div className="flex items-center gap-4 flex-wrap flex-1">
-              <h4 className="text-sm font-semibold text-foreground">Monthly Target</h4>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-muted-foreground">Current: <span className="font-bold text-foreground">{monthlyTarget.current}</span></span>
-                <span className="text-xs text-muted-foreground">Target: <span className="font-bold text-primary">{monthlyTarget.target}</span></span>
-                <Badge className="bg-primary text-primary-foreground text-xs px-2 py-0.5">
-                  {monthlyTarget.percentageIncrease} increase
-                </Badge>
+          {/* Monthly Target + Trend Chart Row */}
+          <div className="grid grid-cols-2 gap-4 pt-4 mt-4 border-t border-border">
+            {/* Monthly Target */}
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
+                <Target className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <h4 className="text-xs font-medium text-muted-foreground mb-1">Monthly Target</h4>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-foreground">{monthlyTarget.current}</span>
+                  <span className="text-xs text-muted-foreground">→</span>
+                  <span className="text-sm font-bold text-primary">{monthlyTarget.target}</span>
+                  <Badge className="bg-primary/10 text-primary border-0 text-[10px] px-1.5 py-0">
+                    +{monthlyTarget.percentageIncrease}
+                  </Badge>
+                </div>
               </div>
             </div>
+
+            {/* Mini Trend Chart */}
+            {improvingTrend.monthlyData && (
+              <div className="flex flex-col">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-medium text-muted-foreground">12 Month Trend</span>
+                  <div className="flex items-center gap-3 text-[10px]">
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-primary" />
+                      You
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-[hsl(38,92%,50%)]" />
+                      Competitor
+                    </span>
+                  </div>
+                </div>
+                <div className="h-16">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={improvingTrend.monthlyData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="youGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="month" hide />
+                      <YAxis hide domain={[0, 'auto']} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'hsl(var(--card))', 
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '6px',
+                          fontSize: '11px'
+                        }}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="you" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth={2}
+                        fill="url(#youGradient)" 
+                        name="You"
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="competitor" 
+                        stroke="hsl(38, 92%, 50%)" 
+                        strokeWidth={2}
+                        strokeDasharray="4 2"
+                        fill="none" 
+                        name="Competitor"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

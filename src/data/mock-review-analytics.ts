@@ -159,7 +159,21 @@ export const mockReviewAnalyticsData: ReviewAnalyticsData = {
   improvingTrend: {
     message: "266 reviews behind Smile Dental Care. ~22 months to catch up at current pace.",
     behindBy: "266 reviews",
-    percentile: "35th percentile"
+    percentile: "35th percentile",
+    monthlyData: [
+      { month: "Feb", you: 10, competitor: 8 },
+      { month: "Mar", you: 4, competitor: 6 },
+      { month: "Apr", you: 8, competitor: 11 },
+      { month: "May", you: 17, competitor: 19 },
+      { month: "Jun", you: 11, competitor: 14 },
+      { month: "Jul", you: 9, competitor: 10 },
+      { month: "Aug", you: 12, competitor: 24 },
+      { month: "Sep", you: 3, competitor: 6 },
+      { month: "Oct", you: 17, competitor: 13 },
+      { month: "Nov", you: 7, competitor: 8 },
+      { month: "Dec", you: 6, competitor: 9 },
+      { month: "Jan", you: 5, competitor: 6 },
+    ]
   },
   metrics: {
     totalReviews: 505,

@@ -50,10 +50,17 @@ export interface TopRatedEmployee {
   topPraiseKeywords: string[];
 }
 
+export interface MonthlyTrendPoint {
+  month: string;
+  you: number;
+  competitor: number;
+}
+
 export interface ImprovingTrend {
   message: string;
   behindBy: string;
   percentile: string;
+  monthlyData?: MonthlyTrendPoint[];
 }
 
 export interface ReviewMetrics {
