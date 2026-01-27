@@ -231,54 +231,50 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
 
   return (
     <div className="space-y-4">
-      {/* Header card */}
-      <Card className="bg-card border-border shadow-sm">
+      {/* Header card with actionable insights */}
+      <Card className="bg-card border-border shadow-sm overflow-hidden">
         <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2 rounded-lg bg-primary/10 shrink-0">
                 <Zap className="h-5 w-5 text-primary" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-base font-bold text-foreground">Marketing Action Plan</h3>
                 <p className="text-xs text-muted-foreground">
-                  {recommendations.length} strategic recommendations to boost your practice
+                  Implement these {recommendations.length} strategies to unlock your growth potential
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            
+            {/* Actionable outcome metrics */}
+            <div className="hidden sm:flex items-center gap-4 shrink-0 bg-muted/50 rounded-lg px-4 py-2">
               <div className="text-center">
-                <div className="text-xl font-bold text-[hsl(var(--rating-negative))]">{highPriorityCount}</div>
-                <div className="text-[9px] text-muted-foreground uppercase tracking-wide">High Priority</div>
+                <div className="text-lg font-bold text-[hsl(var(--rating-positive))]">+20-35%</div>
+                <div className="text-[9px] text-muted-foreground uppercase tracking-wide">Performance Boost</div>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div className="text-center">
+                <div className="text-lg font-bold text-primary">30-50</div>
+                <div className="text-[9px] text-muted-foreground uppercase tracking-wide">New Patients/Mo</div>
               </div>
               <div className="h-8 w-px bg-border" />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="text-center cursor-help">
-                    <div className="text-xl font-bold text-primary">{Math.round(totalImpactScore / recommendations.length)}</div>
-                    <div className="text-[9px] text-muted-foreground uppercase tracking-wide flex items-center gap-0.5 justify-center">
-                      Avg Impact
+                    <div className="text-lg font-bold text-foreground flex items-center gap-1">
+                      {highPriorityCount} <ArrowRight className="h-3 w-3 text-[hsl(var(--rating-negative))]" />
+                    </div>
+                    <div className="text-[9px] text-muted-foreground uppercase tracking-wide flex items-center gap-0.5">
+                      Act Now
                       <Info className="h-2.5 w-2.5" />
                     </div>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[280px] p-3">
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold text-foreground">Combined Marketing Potential</p>
-                    <div className="space-y-1.5 text-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Total performance boost:</span>
-                        <span className="font-semibold text-[hsl(var(--rating-positive))]">+20-35%</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Potential new patients:</span>
-                        <span className="font-semibold text-primary">30-50/month</span>
-                      </div>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
-                      Implementing all recommendations could significantly improve visibility and patient acquisition.
-                    </p>
-                  </div>
+                <TooltipContent side="bottom" className="max-w-[240px] p-3">
+                  <p className="text-xs text-foreground">
+                    <span className="font-semibold">{highPriorityCount} high-priority items</span> need immediate attention to maximize your marketing ROI.
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </div>
