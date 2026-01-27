@@ -1,41 +1,75 @@
+import { ThumbsUp, ThumbsDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Sentiment breakdown component showing positive/negative split
+// Sentiment breakdown component comparing positive rates
 const SentimentBreakdown = ({ 
   positive, 
-  total 
+  total,
+  competitorPositive,
+  competitorTotal,
 }: { 
   positive: number; 
-  total: number; 
+  total: number;
+  competitorPositive: number;
+  competitorTotal: number;
 }) => {
-  const negative = total - positive;
   const positivePercent = total > 0 ? Math.round((positive / total) * 100) : 0;
-  const negativePercent = 100 - positivePercent;
+  const competitorPercent = competitorTotal > 0 ? Math.round((competitorPositive / competitorTotal) * 100) : 0;
+  const difference = positivePercent - competitorPercent;
+  const isAhead = difference > 0;
+  const isBehind = difference < 0;
 
   return (
     <div className="space-y-2">
-      <h4 className="text-xs font-medium text-muted-foreground">Sentiment (12 Mo)</h4>
-      
-      {/* Stacked bar */}
-      <div className="flex h-2.5 rounded-full overflow-hidden">
-        <div 
-          className="bg-[hsl(var(--rating-positive))] transition-all duration-500"
-          style={{ width: `${positivePercent}%` }}
-        />
-        <div 
-          className="bg-[hsl(var(--rating-negative))] transition-all duration-500"
-          style={{ width: `${negativePercent}%` }}
-        />
+      <div className="flex items-center justify-between">
+        <h4 className="text-xs font-medium text-muted-foreground">Sentiment (12 Mo)</h4>
+        <span
+          className={cn(
+            "flex items-center gap-0.5 text-[10px] font-medium",
+            isAhead && "text-[hsl(var(--rating-positive))]",
+            isBehind && "text-[hsl(var(--rating-negative))]",
+            !isAhead && !isBehind && "text-muted-foreground"
+          )}
+        >
+          {isAhead ? (
+            <>
+              <ThumbsUp className="h-2.5 w-2.5" />
+              +{Math.abs(difference)}%
+            </>
+          ) : isBehind ? (
+            <>
+              <ThumbsDown className="h-2.5 w-2.5" />
+              -{Math.abs(difference)}%
+            </>
+          ) : (
+            "="
+          )}
+        </span>
       </div>
       
-      {/* Labels */}
-      <div className="flex justify-between text-[10px]">
-        <span className="text-[hsl(var(--rating-positive))] font-medium">
-          {positivePercent}% positive ({positive})
-        </span>
-        <span className="text-[hsl(var(--rating-negative))] font-medium">
-          {negativePercent}% ({negative})
-        </span>
+      {/* Bars */}
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-2.5 bg-muted rounded-full overflow-hidden">
+            <div 
+              className={cn(
+                "h-full rounded-full transition-all duration-500",
+                isAhead ? "bg-[hsl(var(--rating-positive))]" : isBehind ? "bg-[hsl(var(--rating-negative))]" : "bg-primary"
+              )}
+              style={{ width: `${positivePercent}%` }}
+            />
+          </div>
+          <span className="text-xs font-bold text-foreground w-12 text-right">{positivePercent}%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-2.5 bg-muted rounded-full overflow-hidden">
+            <div 
+              className="h-full rounded-full bg-muted-foreground/40 transition-all duration-500"
+              style={{ width: `${competitorPercent}%` }}
+            />
+          </div>
+          <span className="text-xs text-muted-foreground w-12 text-right">{competitorPercent}%</span>
+        </div>
       </div>
     </div>
   );
