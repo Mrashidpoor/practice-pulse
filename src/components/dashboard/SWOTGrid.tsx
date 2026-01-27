@@ -150,43 +150,14 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
   return (
     <Card className="bg-card border-border shadow-sm">
       <CardContent className="p-4">
-        {/* Header with inline competitor cards */}
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
-          <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+          <div className="flex items-center gap-2">
             <Target className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           </div>
 
-          {/* Inline competitor score cards */}
-          <div className="flex gap-1.5 flex-1">
-            {allScores.map((item, idx) => {
-              const getScoreStyles = (score: number) => {
-                if (score >= 7) return "bg-[hsl(var(--rating-positive))]/10 text-[hsl(var(--rating-positive))]";
-                if (score >= 5) return "bg-amber-500/10 text-amber-600";
-                return "bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))]";
-              };
-              
-              return (
-                <div 
-                  key={item.name}
-                  className={cn(
-                    "flex items-center gap-1.5 px-2 py-1 rounded-md",
-                    getScoreStyles(item.score),
-                    item.isYou && "ring-1 ring-primary"
-                  )}
-                >
-                  <span className="text-xs font-medium">
-                    {item.isYou ? "You" : item.name.split(" ")[0]}:
-                  </span>
-                  <span className="text-xs font-bold">{item.score}</span>
-                  <span className="text-[9px] opacity-50">/10</span>
-                </div>
-              );
-            })}
-          </div>
-
           {/* Status badges */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2">
             <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2 py-0.5 font-medium">
               <CheckCircle className="h-3 w-3 mr-1" />
               {strongCount} Strong
