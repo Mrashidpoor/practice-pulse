@@ -93,12 +93,11 @@ export function StrengthCard({ strength }: StrengthCardProps) {
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-4 flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0">
-                <CheckCircle className="h-4 w-4 text-[hsl(var(--rating-positive))]" />
+              <div className="p-2 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0 text-xl flex items-center justify-center w-10 h-10">
+                {getCategoryEmoji(strength.category)}
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-foreground">
-                  <span className="mr-1.5">{getCategoryEmoji(strength.category)}</span>
                   {strength.category}
                 </h3>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{strength.description}</p>
