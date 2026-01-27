@@ -71,62 +71,56 @@ export function MarketingScoreCard({
           </div>
 
           {/* Ranking visualization */}
-          <div className="flex-1 px-4 py-3 border-l border-border">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-xs font-medium text-muted-foreground">Market Position</span>
+          <div className="flex-1 px-5 py-3 border-l border-border">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm font-medium text-foreground">Market Position</span>
               </div>
-              <Badge 
-                className={cn(
-                  "text-[10px] px-1.5 py-0 border-0",
-                  yourRank === 1 
-                    ? "bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))]" 
-                    : "bg-muted text-muted-foreground"
-                )}
-              >
-                {yourRank === 1 ? (
-                  <><Trophy className="h-2.5 w-2.5 mr-0.5" /> #1 in Market</>
-                ) : (
-                  `#${yourRank} of ${allScores.length}`
-                )}
-              </Badge>
+              <span className="text-xs font-medium text-muted-foreground">
+                #{yourRank} of {allScores.length}
+              </span>
             </div>
 
-            {/* Competitor bars */}
-            <div className="space-y-1">
-              {allScores.slice(0, 5).map((comp, idx) => (
-                <div key={comp.name} className="flex items-center gap-2">
-                  <span className={cn(
-                    "text-[10px] w-3",
-                    comp.isYou ? "font-bold text-foreground" : "text-muted-foreground"
-                  )}>
-                    {idx + 1}
-                  </span>
-                  <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className={cn(
-                        "h-full rounded-full transition-all duration-500",
-                        comp.isYou ? "bg-primary" : "bg-muted-foreground/30"
-                      )}
-                      style={{ width: `${(comp.score / 10) * 100}%` }}
-                    />
+            {/* Competitor bars - cleaner design */}
+            <div className="space-y-2">
+              {allScores.slice(0, 5).map((comp, idx) => {
+                const barWidth = (comp.score / 10) * 100;
+                return (
+                  <div key={comp.name} className="flex items-center gap-3">
+                    <span className={cn(
+                      "text-xs w-3 text-right tabular-nums",
+                      comp.isYou ? "font-bold text-foreground" : "text-muted-foreground"
+                    )}>
+                      {idx + 1}
+                    </span>
+                    <div className="flex-1 h-2.5 bg-muted rounded-full overflow-hidden relative">
+                      <div 
+                        className={cn(
+                          "h-full rounded-full transition-all duration-700 ease-out",
+                          comp.isYou 
+                            ? "bg-gradient-to-r from-primary/80 to-primary" 
+                            : "bg-muted-foreground/25"
+                        )}
+                        style={{ width: `${barWidth}%` }}
+                      />
+                    </div>
+                    <span className={cn(
+                      "text-xs w-14 text-right",
+                      comp.isYou ? "font-bold text-foreground" : "text-muted-foreground"
+                    )}>
+                      {comp.isYou ? "You" : comp.name.split(" ")[0]}
+                    </span>
+                    <span className={cn(
+                      "text-xs w-8 text-right tabular-nums",
+                      comp.isYou && "font-bold",
+                      getScoreColor(comp.score)
+                    )}>
+                      {comp.score}
+                    </span>
                   </div>
-                  <span className={cn(
-                    "text-[10px] w-12 truncate",
-                    comp.isYou ? "font-bold text-foreground" : "text-muted-foreground"
-                  )}>
-                    {comp.isYou ? "You" : comp.name.split(" ")[0]}
-                  </span>
-                  <span className={cn(
-                    "text-[10px] w-6 text-right",
-                    comp.isYou ? "font-bold" : "text-muted-foreground",
-                    getScoreColor(comp.score)
-                  )}>
-                    {comp.score}
-                  </span>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
