@@ -1,9 +1,9 @@
 import { TrendingUp, Target, Calendar, Zap, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CompetitorRankChart } from "./CompetitorRankChart";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
+import { MarketingScoreCard } from "./MarketingScoreCard";
 import { Progress } from "@/components/ui/progress";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import type {
@@ -176,6 +176,20 @@ export function MarketingInsights({
           </div>
         </CardContent>
       </Card>
+
+      {/* Marketing Score Overview */}
+      <MarketingScoreCard
+        yourScore={6.4}
+        competitors={[
+          { name: "Smile Dental Care", score: 7.2 },
+          { name: "Family Dental", score: 6.9 },
+          { name: "Gentle Dentistry", score: 7.5 },
+          { name: "Premier Dental", score: 6.1 },
+          { name: "Bright Smiles", score: 5.8 },
+        ]}
+        trend="up"
+        trendValue="+0.3 vs last month"
+      />
 
       {/* SWOT Analysis */}
       <SWOTGrid swot={swotAnalysis} />
