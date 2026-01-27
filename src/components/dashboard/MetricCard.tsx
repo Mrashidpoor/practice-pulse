@@ -10,55 +10,51 @@ interface MetricCardProps {
   showDifference?: boolean;
 }
 
-// Circular progress component
-const CircularProgress = ({ 
-  percentage, 
-  size = 64, 
-  strokeWidth = 6,
-  color = "primary"
+// Simple pie chart showing You vs Competitor proportion
+const ComparisonPie = ({ 
+  yourValue, 
+  competitorValue,
+  size = 40
 }: { 
-  percentage: number; 
-  size?: number; 
-  strokeWidth?: number;
-  color?: "primary" | "positive" | "negative";
+  yourValue: number; 
+  competitorValue: number;
+  size?: number;
 }) => {
-  const radius = (size - strokeWidth) / 2;
-  const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (Math.min(percentage, 100) / 100) * circumference;
-
-  const colorClass = {
-    primary: "text-primary",
-    positive: "text-[hsl(var(--rating-positive))]",
-    negative: "text-[hsl(var(--rating-negative))]",
-  }[color];
+  const total = yourValue + competitorValue;
+  const yourPercentage = total > 0 ? (yourValue / total) * 100 : 50;
+  const isAhead = yourValue > competitorValue;
+  
+  // Calculate the stroke-dasharray for pie segments
+  const circumference = Math.PI * (size - 4); // radius = (size-4)/2, so diameter = size-4
+  const yourDash = (yourPercentage / 100) * circumference;
+  const competitorDash = circumference - yourDash;
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg className="transform -rotate-90" width={size} height={size}>
-        {/* Background circle */}
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {/* Background circle (competitor portion) */}
         <circle
           cx={size / 2}
           cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          className="fill-none stroke-muted"
+          r={(size - 4) / 2}
+          fill="none"
+          stroke="hsl(var(--muted))"
+          strokeWidth={4}
         />
-        {/* Progress circle */}
+        {/* Your portion */}
         <circle
           cx={size / 2}
           cy={size / 2}
-          r={radius}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
+          r={(size - 4) / 2}
+          fill="none"
+          stroke={isAhead ? "hsl(var(--rating-positive))" : "hsl(var(--rating-negative))"}
+          strokeWidth={4}
+          strokeDasharray={`${yourDash} ${competitorDash}`}
+          strokeDashoffset={circumference / 4} // Start from top
           strokeLinecap="round"
-          className={cn("fill-none transition-all duration-500", colorClass)}
-          style={{ stroke: "currentColor" }}
+          className="transition-all duration-500"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs font-bold text-foreground">{Math.round(percentage)}%</span>
-      </div>
     </div>
   );
 };
@@ -67,7 +63,6 @@ export function MetricCard({
   title,
   yourValue,
   competitorValue,
-  competitorName = "Competitor",
   type = "number",
   showDifference = true,
 }: MetricCardProps) {
@@ -76,26 +71,22 @@ export function MetricCard({
   const difference = yourNum - compNum;
   const isAhead = difference > 0;
   const isBehind = difference < 0;
-  
-  // Calculate percentage for circular progress (your value as % of competitor)
-  const percentage = compNum > 0 ? (yourNum / compNum) * 100 : 100;
-  const color = isAhead ? "positive" : isBehind ? "negative" : "primary";
 
   return (
-    <div className="flex items-center gap-3 bg-card border border-border rounded-lg p-3">
-      <CircularProgress percentage={percentage} size={56} strokeWidth={5} color={color} />
+    <div className="flex flex-col items-center gap-1.5 text-center">
+      <ComparisonPie yourValue={yourNum} competitorValue={compNum} size={36} />
       
-      <div className="flex-1 min-w-0">
-        <h4 className="text-xs font-medium text-muted-foreground mb-1 truncate">{title}</h4>
-        <div className="flex items-baseline gap-2">
-          <span className="text-lg font-bold text-foreground">{yourValue}</span>
-          <span className="text-xs text-muted-foreground">vs {competitorValue}</span>
+      <div className="space-y-0.5">
+        <h4 className="text-[10px] font-medium text-muted-foreground leading-tight">{title}</h4>
+        <div className="flex items-baseline justify-center gap-1">
+          <span className="text-sm font-bold text-foreground">{yourValue}</span>
+          <span className="text-[10px] text-muted-foreground">vs {competitorValue}</span>
         </div>
         
         {showDifference && (
           <span
             className={cn(
-              "flex items-center gap-0.5 text-xs font-medium mt-0.5",
+              "flex items-center justify-center gap-0.5 text-[10px] font-medium",
               isAhead && "text-[hsl(var(--rating-positive))]",
               isBehind && "text-[hsl(var(--rating-negative))]",
               !isAhead && !isBehind && "text-muted-foreground"
@@ -103,13 +94,13 @@ export function MetricCard({
           >
             {isAhead ? (
               <>
-                <ThumbsUp className="h-3 w-3" />
-                +{Math.abs(difference)}{type === "percentage" ? "%" : ""} ahead
+                <ThumbsUp className="h-2.5 w-2.5" />
+                +{Math.abs(difference)}{type === "percentage" ? "%" : ""}
               </>
             ) : isBehind ? (
               <>
-                <ThumbsDown className="h-3 w-3" />
-                {Math.abs(difference)}{type === "percentage" ? "%" : ""} behind
+                <ThumbsDown className="h-2.5 w-2.5" />
+                -{Math.abs(difference)}{type === "percentage" ? "%" : ""}
               </>
             ) : (
               "Tied"
