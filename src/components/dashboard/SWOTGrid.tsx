@@ -123,32 +123,41 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       actionLabel: "Monitor closely"
     }
   ];
-
   const overallScore = ((8.5 + (10 - 4.2) + 7.1 + (10 - 5.8)) / 4).toFixed(1);
+  const competitorScore = "7.2"; // Competitor's SWOT score for comparison
 
   return (
     <Card className="bg-card border-border shadow-sm">
       <CardContent className="p-4">
         {/* Summary header */}
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
+        <div className="flex items-center gap-4 mb-4 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <Target className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2.5 py-1 font-medium">
+          
+          {/* Scores comparison */}
+          <div className="flex items-center gap-1.5 bg-primary/10 rounded-md px-2.5 py-1">
+            <span className="text-xs text-primary font-medium">You:</span>
+            <span className="text-base font-bold text-primary">{overallScore}</span>
+            <span className="text-[10px] text-primary/70">/10</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-muted rounded-md px-2.5 py-1">
+            <span className="text-xs text-muted-foreground font-medium">Competitor:</span>
+            <span className="text-base font-bold text-foreground">{competitorScore}</span>
+            <span className="text-[10px] text-muted-foreground">/10</span>
+          </div>
+          
+          {/* Status badges */}
+          <div className="flex items-center gap-2 ml-auto">
+            <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2 py-0.5 font-medium">
               <CheckCircle className="h-3 w-3 mr-1" />
               2 Strong
             </Badge>
-            <Badge className="bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-0 text-xs px-2.5 py-1 font-medium">
+            <Badge className="bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5 font-medium">
               <XCircle className="h-3 w-3 mr-1" />
               1 Needs Work
             </Badge>
-            <div className="flex items-center gap-1.5 pl-3 border-l border-border bg-primary/10 rounded-md px-3 py-1">
-              <span className="text-xs text-primary font-medium">Score</span>
-              <span className="text-xl font-bold text-primary">{overallScore}</span>
-              <span className="text-xs text-primary/70">/10</span>
-            </div>
           </div>
         </div>
 
