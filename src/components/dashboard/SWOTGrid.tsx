@@ -35,75 +35,63 @@ function SWOTSection({ data }: { data: SWOTSectionData }) {
     <Card className={cn("border-border shadow-sm overflow-hidden", bgClass)}>
       <CardContent className="p-0">
         {/* Header with score */}
-        <div className="flex items-center justify-between p-3 border-b border-border/50">
-          <div className="flex items-center gap-2">
-            <div className={cn("p-1.5 rounded-md", colorClass.replace("text-", "bg-") + "/15")}>
-              <Icon className={cn("h-4 w-4", colorClass)} />
-            </div>
-            <h4 className="font-semibold text-sm text-foreground">{title}</h4>
+        <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-border/50">
+          <div className="flex items-center gap-1.5">
+            <Icon className={cn("h-3.5 w-3.5", colorClass)} />
+            <h4 className="font-semibold text-xs text-foreground">{title}</h4>
           </div>
-          <div className="flex items-center gap-2">
-            <span className={cn("text-lg font-bold", colorClass)}>{score}</span>
-            <div className="w-12">
-              <Progress 
-                value={score * 10} 
-                className="h-1.5"
-              />
-            </div>
+          <div className="flex items-center gap-1.5">
+            <span className={cn("text-sm font-bold", colorClass)}>{score}</span>
+            <Progress value={score * 10} className="h-1 w-8" />
           </div>
         </div>
 
         {/* Insight badge */}
-        <div className="px-3 py-2 border-b border-border/30 bg-muted/30">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Key Insight</span>
-            <div className="flex items-center gap-1.5">
-              {insight.trend === "up" && <TrendingUp className="h-3 w-3 text-[hsl(var(--rating-positive))]" />}
-              {insight.trend === "down" && <TrendingDown className="h-3 w-3 text-[hsl(var(--rating-negative))]" />}
-              <Badge variant="outline" className={cn("text-[10px] px-1.5 py-0 border-0", colorClass.replace("text-", "bg-") + "/10", colorClass)}>
+        <div className="px-2.5 py-1.5 border-b border-border/30 bg-muted/30">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[10px] text-foreground font-medium leading-tight flex-1">{insight.label}</p>
+            <div className="flex items-center gap-1 shrink-0">
+              {insight.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-[hsl(var(--rating-positive))]" />}
+              {insight.trend === "down" && <TrendingDown className="h-2.5 w-2.5 text-[hsl(var(--rating-negative))]" />}
+              <Badge variant="outline" className={cn("text-[9px] px-1 py-0 border-0 h-4", colorClass.replace("text-", "bg-") + "/10", colorClass)}>
                 {insight.value}
               </Badge>
             </div>
           </div>
-          <p className="text-xs text-foreground mt-1 font-medium">{insight.label}</p>
         </div>
 
         {/* Items as compact chips */}
-        <div className="p-3">
-          <div className="flex flex-wrap gap-1.5">
+        <div className="px-2.5 py-1.5">
+          <div className="flex flex-wrap gap-1">
             {items.slice(0, 3).map((item, index) => (
               <Badge 
                 key={index} 
                 variant="secondary" 
-                className="text-[10px] px-2 py-0.5 font-normal bg-background/80 text-muted-foreground"
+                className="text-[9px] px-1.5 py-0 h-4 font-normal bg-background/80 text-muted-foreground"
               >
-                {item.length > 25 ? item.substring(0, 25) + "..." : item}
+                {item.length > 20 ? item.substring(0, 20) + "..." : item}
               </Badge>
             ))}
             {items.length > 3 && (
-              <Badge variant="outline" className="text-[10px] px-2 py-0.5 text-muted-foreground">
-                +{items.length - 3} more
+              <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 text-muted-foreground">
+                +{items.length - 3}
               </Badge>
             )}
           </div>
-        </div>
-
-        {/* Action hint */}
-        {actionLabel && (
-          <div className="px-3 pb-3">
-            <div className={cn("flex items-center gap-1.5 text-[10px]", colorClass)}>
-              <Zap className="h-3 w-3" />
+          {/* Action hint inline */}
+          {actionLabel && (
+            <div className={cn("flex items-center gap-1 text-[9px] mt-1.5", colorClass)}>
+              <Zap className="h-2.5 w-2.5" />
               <span className="font-medium">{actionLabel}</span>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </CardContent>
     </Card>
   );
 }
 
 export function SWOTGrid({ swot }: SWOTGridProps) {
-  // Generate insights based on SWOT data
   const sections: SWOTSectionData[] = [
     {
       title: "Strengths",
@@ -112,11 +100,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       colorClass: "text-[hsl(var(--rating-positive))]",
       bgClass: "bg-[hsl(var(--rating-positive))]/5",
       score: 8.5,
-      insight: {
-        label: "Staff praised 3x more than competitors",
-        value: "Top 15%",
-        trend: "up"
-      },
+      insight: { label: "Staff praised 3x more than competitors", value: "Top 15%", trend: "up" },
       actionLabel: "Leverage in marketing"
     },
     {
@@ -126,11 +110,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       colorClass: "text-[hsl(var(--rating-negative))]",
       bgClass: "bg-[hsl(var(--rating-negative))]/5",
       score: 4.2,
-      insight: {
-        label: "Wait time mentioned in 23% of reviews",
-        value: "-12% MoM",
-        trend: "down"
-      },
+      insight: { label: "Wait time mentioned in 23% of reviews", value: "-12% MoM", trend: "down" },
       actionLabel: "Priority fix needed"
     },
     {
@@ -140,11 +120,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       colorClass: "text-[hsl(var(--rating-neutral))]",
       bgClass: "bg-[hsl(var(--rating-neutral))]/5",
       score: 7.1,
-      insight: {
-        label: "Tax season drives 40% more searches",
-        value: "Feb-Apr",
-        trend: "up"
-      },
+      insight: { label: "Tax season drives 40% more searches", value: "Feb-Apr", trend: "up" },
       actionLabel: "Plan campaign now"
     },
     {
@@ -154,46 +130,41 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       colorClass: "text-orange-500",
       bgClass: "bg-orange-500/5",
       score: 5.8,
-      insight: {
-        label: "2 new competitors within 5 miles",
-        value: "High Risk",
-        trend: "down"
-      },
+      insight: { label: "2 new competitors within 5 miles", value: "High Risk", trend: "down" },
       actionLabel: "Monitor closely"
     }
   ];
 
-  // Summary stats
   const overallScore = ((8.5 + (10 - 4.2) + 7.1 + (10 - 5.8)) / 4).toFixed(1);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {/* Summary bar */}
-      <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-foreground">Market Position Score</span>
+      <div className="flex items-center justify-between px-2.5 py-1.5 bg-muted/50 rounded-lg">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <Target className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-medium text-foreground">Market Position</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-primary">{overallScore}</span>
-            <span className="text-xs text-muted-foreground">/10</span>
+          <div className="flex items-center gap-1">
+            <span className="text-lg font-bold text-primary">{overallScore}</span>
+            <span className="text-[10px] text-muted-foreground">/10</span>
           </div>
         </div>
-        <div className="flex items-center gap-3 text-xs">
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-[hsl(var(--rating-positive))]" />
-            <span className="text-muted-foreground">Above avg in <span className="font-medium text-foreground">2</span> areas</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-[hsl(var(--rating-negative))]" />
-            <span className="text-muted-foreground">Needs work in <span className="font-medium text-foreground">1</span> area</span>
-          </div>
+        <div className="flex items-center gap-2 text-[10px]">
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--rating-positive))]" />
+            <span className="text-muted-foreground">Strong: <span className="font-medium text-foreground">2</span></span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--rating-negative))]" />
+            <span className="text-muted-foreground">Needs work: <span className="font-medium text-foreground">1</span></span>
+          </span>
         </div>
       </div>
 
       {/* SWOT Grid */}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-2">
         {sections.map((section) => (
           <SWOTSection key={section.title} data={section} />
         ))}
