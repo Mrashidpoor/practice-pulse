@@ -67,14 +67,14 @@ export function MarketingInsights({
           <div className="grid grid-cols-4 divide-x divide-border/50 pt-4 border-t border-border">
             <div className="px-4 first:pl-0 last:pr-0">
               <MetricCard
-                title="Total Reviews"
+                title="Lifetime Reviews"
                 yourValue={metrics.totalReviews}
                 competitorValue={metrics.totalReviewsCompetitor}
               />
             </div>
             <div className="px-4 first:pl-0 last:pr-0">
               <MetricCard
-                title="Last 12 Mo"
+                title="Reviews (12 Mo)"
                 yourValue={metrics.last12MonthsReviews}
                 competitorValue={metrics.last12MonthsReviewsCompetitor}
               />
@@ -89,7 +89,7 @@ export function MarketingInsights({
             </div>
             <div className="px-4 first:pl-0 last:pr-0">
               <MetricCard
-                title="Positive Rate"
+                title="Satisfaction Rate"
                 yourValue={metrics.positiveRate}
                 competitorValue={metrics.positiveRateCompetitor}
                 type="percentage"

@@ -22,7 +22,7 @@ const SentimentBreakdown = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h4 className="text-xs font-medium text-muted-foreground">Sentiment (12 Mo)</h4>
+        <h4 className="text-xs font-medium text-muted-foreground">Positive Sentiment</h4>
         <span
           className={cn(
             "flex items-center gap-0.5 text-[10px] font-medium",
