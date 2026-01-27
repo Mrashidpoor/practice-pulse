@@ -109,7 +109,7 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       title: "Opportunities",
       items: swot.opportunities,
       icon: Lightbulb,
-      colorClass: "text-[hsl(var(--rating-neutral))]",
+      colorClass: "text-amber-500",
       score: 7.1,
       insight: { label: "32% review increase needed to match competitor pace", value: "15/mo target", trend: "up" },
       actionLabel: "Automate follow-ups"
