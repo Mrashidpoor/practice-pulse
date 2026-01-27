@@ -124,41 +124,78 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       actionLabel: "Close the gap"
     }
   ];
-  const overallScore = ((8.5 + (10 - 4.2) + 7.1 + (10 - 5.8)) / 4).toFixed(1);
-  const competitorScore = "7.2"; // Competitor's SWOT score for comparison
+  
+  // Calculate overall score from SWOT
+  const yourScore = 6.4;
+  
+  // Top 5 competitor scores
+  const competitorScores = [
+    { name: "Smile Dental Care", score: 7.2 },
+    { name: "Family Dental", score: 6.9 },
+    { name: "Gentle Dentistry", score: 7.5 },
+    { name: "Premier Dental", score: 6.1 },
+    { name: "Bright Smiles", score: 5.8 },
+  ];
+  
+  // All scores for ranking
+  const allScores = [
+    { name: "You", score: yourScore, isYou: true },
+    ...competitorScores.map(c => ({ ...c, isYou: false })),
+  ].sort((a, b) => b.score - a.score);
+  
+  const yourRank = allScores.findIndex(s => s.isYou) + 1;
+  const strongCount = sections.filter(s => s.score >= 7).length;
+  const needsWorkCount = sections.filter(s => s.score < 5).length;
 
   return (
     <Card className="bg-card border-border shadow-sm">
       <CardContent className="p-4">
-        {/* Summary header */}
-        <div className="flex items-center gap-4 mb-4 pb-3 border-b border-border">
+        {/* Summary header with multi-competitor comparison */}
+        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <Target className="h-4 w-4 text-primary" />
             <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           </div>
           
-          {/* Scores comparison - lower score gets red, higher gets green */}
-          <div className="flex items-center gap-1.5 bg-[hsl(var(--rating-negative))]/10 rounded-md px-2.5 py-1">
-            <span className="text-xs text-[hsl(var(--rating-negative))] font-medium">Smile Dental:</span>
-            <span className="text-base font-bold text-[hsl(var(--rating-negative))]">{overallScore}</span>
-            <span className="text-[10px] text-[hsl(var(--rating-negative))]/70">/10</span>
-          </div>
-          <div className="flex items-center gap-1.5 bg-[hsl(var(--rating-positive))]/10 rounded-md px-2.5 py-1">
-            <span className="text-xs text-[hsl(var(--rating-positive))] font-medium">Aspen Dental:</span>
-            <span className="text-base font-bold text-[hsl(var(--rating-positive))]">{competitorScore}</span>
-            <span className="text-[10px] text-[hsl(var(--rating-positive))]/70">/10</span>
+          {/* Compact ranking display */}
+          <div className="flex items-center gap-1 bg-muted rounded-lg px-2 py-1">
+            {allScores.slice(0, 6).map((item, idx) => (
+              <div 
+                key={item.name}
+                className={cn(
+                  "flex items-center gap-1 px-2 py-0.5 rounded text-xs",
+                  item.isYou 
+                    ? yourRank <= 2 
+                      ? "bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] font-semibold" 
+                      : yourRank >= 5 
+                        ? "bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] font-semibold"
+                        : "bg-primary/15 text-primary font-semibold"
+                    : "text-muted-foreground"
+                )}
+              >
+                <span className="text-[10px] opacity-60">#{idx + 1}</span>
+                <span className="font-medium truncate max-w-[60px]">
+                  {item.isYou ? "You" : item.name.split(" ")[0]}
+                </span>
+                <span className={cn("font-bold", item.isYou && "text-inherit")}>
+                  {item.score}
+                </span>
+              </div>
+            ))}
           </div>
           
           {/* Status badges */}
           <div className="flex items-center gap-2 ml-auto">
             <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2 py-0.5 font-medium">
               <CheckCircle className="h-3 w-3 mr-1" />
-              2 Strong
+              {strongCount} Strong
             </Badge>
-            <Badge className="bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5 font-medium">
-              <XCircle className="h-3 w-3 mr-1" />
-              1 Needs Work
-            </Badge>
+            {needsWorkCount > 0 && (
+              <Badge className="bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5 font-medium">
+                <XCircle className="h-3 w-3 mr-1" />
+                {needsWorkCount} Needs Work
+              </Badge>
+            )}
           </div>
         </div>
 
