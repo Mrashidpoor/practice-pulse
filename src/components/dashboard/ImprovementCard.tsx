@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { ChevronDown, Clock, Target, Lightbulb, Star, ShieldAlert, Receipt, Heart, Clock as ClockIcon, User, Sparkles, CheckCircle, ArrowRight } from "lucide-react";
+import { ChevronDown, ChevronUp, Lightbulb, Star, ShieldAlert, Receipt, Heart, Clock, User, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import type { CompetitorAdvantage } from "@/types/review-analytics";
 import { cn } from "@/lib/utils";
 
@@ -14,62 +15,52 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "shield-alert": ShieldAlert,
   "receipt": Receipt,
   "heart": Heart,
-  "clock": ClockIcon,
+  "clock": Clock,
   "user-check": User,
 };
 
-// Priority config matching Recommendations style
-const priorityConfig = {
-  important: {
-    badge: "bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-[hsl(var(--rating-negative))]/30",
-    icon: "text-[hsl(var(--rating-negative))]",
-    iconBg: "bg-[hsl(var(--rating-negative))]/10",
-    label: "IMPORTANT",
-    bar: "bg-[hsl(var(--rating-negative))]",
-    cardBg: "bg-[hsl(var(--rating-negative))]/5",
-  },
-  needsImprovement: {
-    badge: "bg-[hsl(var(--rating-neutral))]/15 text-[hsl(var(--rating-neutral))] border-[hsl(var(--rating-neutral))]/30",
-    icon: "text-[hsl(var(--rating-neutral))]",
-    iconBg: "bg-[hsl(var(--rating-neutral))]/10",
-    label: "NEEDS IMPROVEMENT",
-    bar: "bg-[hsl(var(--rating-neutral))]",
-    cardBg: "bg-[hsl(var(--rating-neutral))]/5",
-  },
-  consider: {
-    badge: "bg-muted text-muted-foreground border-border",
-    icon: "text-muted-foreground",
-    iconBg: "bg-muted",
-    label: "CONSIDER",
-    bar: "bg-muted-foreground/40",
-    cardBg: "bg-muted/30",
-  },
+// Priority styling based on rank
+const getPriorityStyles = (rank: number): { 
+  label: string; 
+  badgeClass: string; 
+  cardClass: string;
+  iconBgClass: string;
+  negativeCardClass: string;
+  negativeTextClass: string;
+  negativeBorderClass: string;
+} => {
+  if (rank === 1) {
+    return {
+      label: "Important",
+      badgeClass: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border-0",
+      cardClass: "border-l-4 border-l-red-400 bg-red-50/60 dark:bg-red-950/30",
+      iconBgClass: "bg-red-100 dark:bg-red-900/30",
+      negativeCardClass: "bg-red-50/80 dark:bg-red-950/40",
+      negativeTextClass: "text-red-700 dark:text-red-400",
+      negativeBorderClass: "border-l-red-400",
+    };
+  } else if (rank <= 3) {
+    return {
+      label: "Needs Improvement",
+      badgeClass: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
+      cardClass: "border-l-4 border-l-amber-300 bg-amber-50/40 dark:bg-amber-950/20",
+      iconBgClass: "bg-amber-100 dark:bg-amber-900/30",
+      negativeCardClass: "bg-amber-50/80 dark:bg-amber-950/40",
+      negativeTextClass: "text-amber-700 dark:text-amber-400",
+      negativeBorderClass: "border-l-amber-400",
+    };
+  } else {
+    return {
+      label: "Consider",
+      badgeClass: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
+      cardClass: "border-l-4 border-l-slate-300 bg-slate-100/50 dark:bg-slate-800/30",
+      iconBgClass: "bg-slate-100 dark:bg-slate-800",
+      negativeCardClass: "bg-slate-100/80 dark:bg-slate-800/40",
+      negativeTextClass: "text-slate-600 dark:text-slate-400",
+      negativeBorderClass: "border-l-slate-400",
+    };
+  }
 };
-
-const getConfig = (rank: number) => {
-  if (rank === 1) return priorityConfig.important;
-  if (rank <= 3) return priorityConfig.needsImprovement;
-  return priorityConfig.consider;
-};
-
-// Estimated improvement projections based on rank
-function getImprovementProjection(rank: number, category: string) {
-  const base = rank === 1 
-    ? { perfMin: 20, perfMax: 35, patientsMin: 12, patientsMax: 20, reach: 2.5 }
-    : rank <= 3
-      ? { perfMin: 12, perfMax: 22, patientsMin: 6, patientsMax: 12, reach: 1.8 }
-      : { perfMin: 5, perfMax: 12, patientsMin: 2, patientsMax: 6, reach: 1.3 };
-
-  // Small deterministic jitter based on category
-  const hash = category.split("").reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 0);
-  const jitter = ((hash % 21) - 10) / 100; // -0.10 to +0.10
-
-  return {
-    performance: `+${Math.round(base.perfMin * (1 + jitter))}-${Math.round(base.perfMax * (1 + jitter))}%`,
-    patients: `${Math.round(base.patientsMin * (1 + jitter))}-${Math.round(base.patientsMax * (1 + jitter))}`,
-    reach: `${(base.reach * (1 + jitter / 2)).toFixed(1).replace(/\.0$/, "")}x`,
-  };
-}
 
 // Helper to calculate time ago
 const getTimeAgo = (dateString: string): string => {
@@ -103,90 +94,50 @@ const StarRating = ({ rating, color = "orange" }: { rating: number; color?: "ora
 );
 
 export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const Icon = iconMap[advantage.icon] || ShieldAlert;
-  const config = getConfig(rank);
-  const projection = getImprovementProjection(rank, advantage.category);
+  const priorityStyles = getPriorityStyles(rank);
 
   return (
-    <Card 
-      className={cn(
-        "relative overflow-hidden transition-all duration-200 cursor-pointer hover:bg-muted/30 border-border",
-        config.cardBg
-      )}
-      onClick={() => setIsExpanded(!isExpanded)}
-    >
-      {/* Priority indicator bar */}
-      <div className={cn("absolute left-0 top-0 bottom-0 w-1 rounded-l-xl", config.bar)} />
-
-      <CardContent className="p-0">
-        {/* Main row content */}
-        <div className="flex items-center gap-4 p-4 pl-5">
-          {/* Icon */}
-          <div className={cn("relative p-2.5 rounded-xl shrink-0", config.iconBg)}>
-            <Icon className={cn("h-5 w-5", config.icon)} />
-            {rank === 1 && (
-              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--rating-negative))] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[hsl(var(--rating-negative))]" />
-              </span>
-            )}
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1">
-              <h4 className="font-semibold text-sm text-foreground">{advantage.category}</h4>
-              <Badge className={cn("text-[10px] font-semibold uppercase px-1.5 py-0 border", config.badge)}>
-                {config.label}
-              </Badge>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <Card className={cn("border-border shadow-sm hover:shadow-md transition-shadow", priorityStyles.cardClass)}>
+        <CollapsibleTrigger asChild>
+          <button className="w-full text-left">
+            <div className="p-4 flex items-center gap-3">
+              <div className={cn("p-2 rounded-lg shrink-0", priorityStyles.iconBgClass)}>
+                <Icon className="h-4 w-4 text-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="font-semibold text-sm text-foreground">{advantage.category}</h3>
+                  <Badge className={cn("text-xs shrink-0", priorityStyles.badgeClass)}>
+                    {priorityStyles.label}
+                  </Badge>
+                </div>
+                <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{advantage.insight}</p>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="text-sm font-bold text-primary">#{rank}</span>
+                {isOpen ? (
+                  <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                )}
+              </div>
             </div>
-            
-            <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1 text-muted-foreground">
-                <Target className="h-3 w-3 text-primary shrink-0" />
-                <span>{advantage.insight}</span>
-              </span>
-            </div>
-          </div>
+          </button>
+        </CollapsibleTrigger>
 
-          {/* Impact metrics */}
-          <div className="hidden sm:flex items-center gap-3 shrink-0">
-            <div className="flex flex-col items-center px-2 border-r border-border">
-              <div className="text-sm font-bold text-[hsl(var(--rating-positive))]">{projection.performance}</div>
-              <div className="text-[8px] text-muted-foreground uppercase tracking-wider">If Fixed</div>
-            </div>
-            <div className="flex flex-col items-center px-2 border-r border-border">
-              <div className="text-sm font-bold text-primary">{projection.patients}</div>
-              <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Patients/Mo</div>
-            </div>
-            <div className="flex flex-col items-center px-2">
-              <div className="text-sm font-bold text-foreground">{projection.reach}</div>
-              <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Trust</div>
-            </div>
-          </div>
-
-          {/* Chevron */}
-          <ChevronDown className={cn(
-            "h-4 w-4 text-muted-foreground transition-transform duration-200 shrink-0",
-            isExpanded && "rotate-180"
-          )} />
-        </div>
-
-        {/* Expanded content */}
-        <div className={cn(
-          "grid transition-all duration-200 ease-out",
-          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        )}>
-          <div className="overflow-hidden">
-            <div className="border-t border-border bg-muted/40 p-4 pl-5 space-y-4">
-              {/* Two-column comparison */}
-              <div className="grid md:grid-cols-2 gap-3">
-                {/* Patient's Experience */}
-                <div className="border-l-4 border-l-[hsl(var(--rating-negative))] bg-[hsl(var(--rating-negative))]/5 rounded-r-lg p-3">
-                  <h5 className="text-xs font-semibold text-[hsl(var(--rating-negative))] mb-2">
+        <CollapsibleContent>
+          <CardContent className="pt-0 pb-4 px-4 space-y-3">
+            {/* Two-column comparison */}
+            <div className="grid md:grid-cols-2 gap-3">
+              {/* Patient's Experience - color matches priority */}
+              <Card className={cn("border-l-4 border-t-0 border-r-0 border-b-0", priorityStyles.negativeBorderClass, priorityStyles.negativeCardClass)}>
+                <CardContent className="p-3">
+                  <h4 className={cn("text-xs font-semibold mb-2", priorityStyles.negativeTextClass)}>
                     Patient's Experience
-                  </h5>
+                  </h4>
                   <blockquote className="text-xs text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.userComplaint.quote}"
                   </blockquote>
@@ -198,13 +149,15 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
                       <span>{getTimeAgo(advantage.userComplaint.reviewDate)}</span>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                {/* Competitor's Approach */}
-                <div className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-[hsl(var(--rating-positive))]/5 rounded-r-lg p-3">
-                  <h5 className="text-xs font-semibold text-[hsl(var(--rating-positive))] mb-2">
+              {/* Competitor's Approach */}
+              <Card className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-[hsl(var(--rating-positive))]/5 dark:bg-[hsl(var(--rating-positive))]/10 border-t-0 border-r-0 border-b-0">
+                <CardContent className="p-3">
+                  <h4 className="text-xs font-semibold text-[hsl(var(--rating-positive))] mb-2">
                     How {advantage.competitorQuote.competitorName} Does It
-                  </h5>
+                  </h4>
                   <blockquote className="text-xs text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.competitorQuote.quote}"
                   </blockquote>
@@ -214,30 +167,29 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
                       <span>{getTimeAgo(advantage.competitorQuote.reviewDate)}</span>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Recommendation */}
-              <div className="bg-card rounded-lg p-3 border border-border">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                  <Lightbulb className="h-3 w-3 text-primary" />
-                  Recommended Action
-                </div>
-                <p className="text-xs text-foreground">{advantage.competitorQuote.recommendation}</p>
-              </div>
-
-              {/* CTA */}
-              <button 
-                className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                Start Improvement Plan
-                <ArrowRight className="h-4 w-4" />
-              </button>
+                </CardContent>
+              </Card>
             </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+
+            {/* Recommendation - Shiny card */}
+            <Card className="relative overflow-hidden border-primary/40 shadow-md bg-gradient-to-br from-primary/10 via-primary/15 to-primary/10">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-pulse" />
+              <CardContent className="p-3 flex gap-2.5 relative">
+                <div className="p-1.5 rounded-md bg-primary/20 shrink-0">
+                  <Lightbulb className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-semibold text-foreground mb-0.5 flex items-center gap-1">
+                    Recommendation
+                    <Sparkles className="h-3 w-3 text-primary" />
+                  </h4>
+                  <p className="text-xs text-muted-foreground">{advantage.competitorQuote.recommendation}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 }
