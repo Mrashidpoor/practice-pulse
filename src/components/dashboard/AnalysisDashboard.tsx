@@ -1,8 +1,9 @@
-import { AlertTriangle, Trophy, BarChart3 } from "lucide-react";
+import { AlertTriangle, Trophy, BarChart3, Lightbulb } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AreasForImprovement } from "./AreasForImprovement";
 import { YourStrengths } from "./YourStrengths";
 import { MarketingInsights } from "./MarketingInsights";
+import { RecommendationsTab } from "./RecommendationsTab";
 import type { ReviewAnalyticsData } from "@/types/review-analytics";
 
 interface AnalysisDashboardProps {
@@ -38,6 +39,14 @@ export function AnalysisDashboard({ data }: AnalysisDashboardProps) {
             <span className="hidden sm:inline">Marketing Insights</span>
             <span className="sm:hidden">Marketing</span>
           </TabsTrigger>
+          <TabsTrigger
+            value="recommendations"
+            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all"
+          >
+            <Lightbulb className="h-4 w-4" />
+            <span className="hidden sm:inline">Recommendations</span>
+            <span className="sm:hidden">Tips</span>
+          </TabsTrigger>
         </TabsList>
 
         <div className="mt-6">
@@ -58,6 +67,11 @@ export function AnalysisDashboard({ data }: AnalysisDashboardProps) {
               metrics={data.metrics}
               monthlyTarget={data.monthlyReviewTarget}
               swotAnalysis={data.swotAnalysis}
+            />
+          </TabsContent>
+
+          <TabsContent value="recommendations" className="mt-0">
+            <RecommendationsTab
               recommendations={data.marketingRecommendations}
               seasonalTips={data.seasonalTips}
             />
