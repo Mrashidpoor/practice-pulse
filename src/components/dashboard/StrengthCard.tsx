@@ -16,6 +16,24 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   "smile": Smile,
 };
 
+// Map strength categories to relevant emojis
+function getCategoryEmoji(category: string): string {
+  const cat = category.toLowerCase();
+  if (cat.includes("chairside") || cat.includes("manner") || cat.includes("bedside")) return "🤝";
+  if (cat.includes("quality") || cat.includes("dental work") || cat.includes("procedure")) return "🦷";
+  if (cat.includes("friendly") || cat.includes("staff") || cat.includes("team")) return "😊";
+  if (cat.includes("clean") || cat.includes("hygiene") || cat.includes("sanit")) return "✨";
+  if (cat.includes("wait") || cat.includes("time") || cat.includes("punctual")) return "⏱️";
+  if (cat.includes("pain") || cat.includes("comfort") || cat.includes("gentle")) return "💆";
+  if (cat.includes("price") || cat.includes("billing") || cat.includes("afford")) return "💰";
+  if (cat.includes("technology") || cat.includes("modern") || cat.includes("equipment")) return "🔬";
+  if (cat.includes("child") || cat.includes("kid") || cat.includes("pediatric")) return "👶";
+  if (cat.includes("emergency") || cat.includes("urgent")) return "🚨";
+  if (cat.includes("location") || cat.includes("parking") || cat.includes("access")) return "📍";
+  if (cat.includes("communication") || cat.includes("explain")) return "💬";
+  return "⭐";
+}
+
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-0.5">
     {[1, 2, 3, 4, 5].map((star) => (
@@ -79,7 +97,10 @@ export function StrengthCard({ strength }: StrengthCardProps) {
                 <CheckCircle className="h-4 w-4 text-[hsl(var(--rating-positive))]" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-sm text-foreground">{strength.category}</h3>
+                <h3 className="font-semibold text-sm text-foreground">
+                  <span className="mr-1.5">{getCategoryEmoji(strength.category)}</span>
+                  {strength.category}
+                </h3>
                 <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{strength.description}</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
