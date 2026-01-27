@@ -176,6 +176,20 @@ export const mockReviewAnalyticsData: ReviewAnalyticsData = {
     ]
   },
   metrics: {
+    you: {
+      totalReviews: 505,
+      last12MonthsReviews: 136,
+      positiveReviews12Mo: 134,
+      positiveRate: 99,
+    },
+    competitors: [
+      { name: "Smile Dental Care", totalReviews: 771, last12MonthsReviews: 198, positiveReviews12Mo: 185, positiveRate: 93 },
+      { name: "Family Dental Center", totalReviews: 623, last12MonthsReviews: 156, positiveReviews12Mo: 142, positiveRate: 91 },
+      { name: "Gentle Dentistry", totalReviews: 589, last12MonthsReviews: 143, positiveReviews12Mo: 138, positiveRate: 97 },
+      { name: "Premier Dental", totalReviews: 534, last12MonthsReviews: 128, positiveReviews12Mo: 119, positiveRate: 93 },
+      { name: "Bright Smiles", totalReviews: 478, last12MonthsReviews: 112, positiveReviews12Mo: 104, positiveRate: 93 },
+    ],
+    // Legacy fields
     totalReviews: 505,
     totalReviewsCompetitor: 771,
     last12MonthsReviews: 136,

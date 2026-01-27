@@ -63,7 +63,23 @@ export interface ImprovingTrend {
   monthlyData?: MonthlyTrendPoint[];
 }
 
+export interface CompetitorMetric {
+  name: string;
+  totalReviews: number;
+  last12MonthsReviews: number;
+  positiveReviews12Mo: number;
+  positiveRate: number;
+}
+
 export interface ReviewMetrics {
+  you: {
+    totalReviews: number;
+    last12MonthsReviews: number;
+    positiveReviews12Mo: number;
+    positiveRate: number;
+  };
+  competitors: CompetitorMetric[];
+  // Legacy fields for backward compatibility
   totalReviews: number;
   totalReviewsCompetitor: number;
   last12MonthsReviews: number;

@@ -1,8 +1,7 @@
 import { TrendingUp, Target, Calendar, Zap, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MetricCard } from "./MetricCard";
-import { SentimentBreakdown } from "./SentimentBreakdown";
+import { CompetitorRankChart } from "./CompetitorRankChart";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
 import { Progress } from "@/components/ui/progress";
@@ -64,36 +63,56 @@ export function MarketingInsights({
             </div>
           </div>
 
-          {/* Metrics row */}
+          {/* Metrics row - Multi-competitor comparison */}
           <div className="grid grid-cols-4 divide-x divide-border/50 pt-4 border-t border-border">
-            <div className="px-4 first:pl-0 last:pr-0">
-              <MetricCard
+            <div className="px-3 first:pl-0 last:pr-0">
+              <CompetitorRankChart
                 title="Lifetime Reviews"
-                yourValue={metrics.totalReviews}
-                competitorValue={metrics.totalReviewsCompetitor}
+                competitors={[
+                  { name: "You", value: metrics.you?.totalReviews ?? metrics.totalReviews, isYou: true },
+                  ...(metrics.competitors || [{ name: "Competitor", value: metrics.totalReviewsCompetitor }]).map(c => ({
+                    name: c.name,
+                    value: c.totalReviews,
+                  })),
+                ]}
               />
             </div>
-            <div className="px-4 first:pl-0 last:pr-0">
-              <MetricCard
+            <div className="px-3 first:pl-0 last:pr-0">
+              <CompetitorRankChart
                 title="Reviews (12 Mo)"
-                yourValue={metrics.last12MonthsReviews}
-                competitorValue={metrics.last12MonthsReviewsCompetitor}
+                competitors={[
+                  { name: "You", value: metrics.you?.last12MonthsReviews ?? metrics.last12MonthsReviews, isYou: true },
+                  ...(metrics.competitors || [{ name: "Competitor", value: metrics.last12MonthsReviewsCompetitor }]).map(c => ({
+                    name: c.name,
+                    value: c.last12MonthsReviews,
+                  })),
+                ]}
               />
             </div>
-            <div className="px-4 first:pl-0 last:pr-0">
-              <SentimentBreakdown 
-                positive={metrics.positiveReviews12Mo} 
-                total={metrics.last12MonthsReviews}
-                competitorPositive={metrics.positiveReviews12MoCompetitor}
-                competitorTotal={metrics.last12MonthsReviewsCompetitor}
+            <div className="px-3 first:pl-0 last:pr-0">
+              <CompetitorRankChart
+                title="Positive (12 Mo)"
+                competitors={[
+                  { name: "You", value: metrics.you?.positiveReviews12Mo ?? metrics.positiveReviews12Mo, isYou: true },
+                  ...(metrics.competitors || [{ name: "Competitor", value: metrics.positiveReviews12MoCompetitor }]).map(c => ({
+                    name: c.name,
+                    value: c.positiveReviews12Mo,
+                  })),
+                ]}
               />
             </div>
-            <div className="px-4 first:pl-0 last:pr-0">
-              <MetricCard
+            <div className="px-3 first:pl-0 last:pr-0">
+              <CompetitorRankChart
                 title="Satisfaction Rate"
-                yourValue={metrics.positiveRate}
-                competitorValue={metrics.positiveRateCompetitor}
+                competitors={[
+                  { name: "You", value: metrics.you?.positiveRate ?? parseInt(metrics.positiveRate), isYou: true },
+                  ...(metrics.competitors || [{ name: "Competitor", value: parseInt(metrics.positiveRateCompetitor) }]).map(c => ({
+                    name: c.name,
+                    value: c.positiveRate,
+                  })),
+                ]}
                 type="percentage"
+                suffix="%"
               />
             </div>
           </div>
