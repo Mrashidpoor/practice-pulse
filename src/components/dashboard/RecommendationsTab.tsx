@@ -120,40 +120,21 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
           </div>
         </div>
 
-        {/* Impact score with tooltip */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div className="hidden sm:flex flex-col items-center gap-0.5 px-2 cursor-help">
-              <div className="text-lg font-bold text-foreground">{config.impactScore}</div>
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider flex items-center gap-0.5">
-                Impact
-                <Info className="h-2.5 w-2.5" />
-              </div>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="left" className="max-w-[280px] p-3">
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-foreground">Projected Marketing Impact</p>
-              <div className="space-y-1.5 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Marketing performance:</span>
-                  <span className="font-semibold text-[hsl(var(--rating-positive))]">+{config.marketingBoost}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Est. new patients/month:</span>
-                  <span className="font-semibold text-primary">{config.newPatients}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-muted-foreground">Audience reach:</span>
-                  <span className="font-semibold">{config.reachMultiplier} wider</span>
-                </div>
-              </div>
-              <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
-                Based on priority level, industry benchmarks, and implementation timeframe.
-              </p>
-            </div>
-          </TooltipContent>
-        </Tooltip>
+        {/* Impact metrics */}
+        <div className="hidden sm:flex items-center gap-3 shrink-0">
+          <div className="flex flex-col items-center px-2 border-r border-border">
+            <div className="text-sm font-bold text-[hsl(var(--rating-positive))]">+{config.marketingBoost}</div>
+            <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Performance</div>
+          </div>
+          <div className="flex flex-col items-center px-2 border-r border-border">
+            <div className="text-sm font-bold text-primary">{config.newPatients}</div>
+            <div className="text-[8px] text-muted-foreground uppercase tracking-wider">New Patients</div>
+          </div>
+          <div className="flex flex-col items-center px-2">
+            <div className="text-sm font-bold text-foreground">{config.reachMultiplier}</div>
+            <div className="text-[8px] text-muted-foreground uppercase tracking-wider">Reach</div>
+          </div>
+        </div>
 
         {/* Chevron */}
         <ChevronDown className={cn(
