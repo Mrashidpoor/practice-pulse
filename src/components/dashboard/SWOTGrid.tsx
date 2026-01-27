@@ -150,41 +150,10 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
   return (
     <Card className="bg-card border-border shadow-sm">
       <CardContent className="p-4">
-        {/* Summary header with multi-competitor comparison */}
-        <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
-          <div className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
-          </div>
-          
-          {/* Compact ranking display */}
-          <div className="flex items-center gap-1 bg-muted rounded-lg px-2 py-1">
-            {allScores.slice(0, 6).map((item, idx) => (
-              <div 
-                key={item.name}
-                className={cn(
-                  "flex items-center gap-1 px-2 py-0.5 rounded text-xs",
-                  item.isYou 
-                    ? yourRank <= 2 
-                      ? "bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] font-semibold" 
-                      : yourRank >= 5 
-                        ? "bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] font-semibold"
-                        : "bg-primary/15 text-primary font-semibold"
-                    : "text-muted-foreground"
-                )}
-              >
-                <span className="text-[10px] opacity-60">#{idx + 1}</span>
-                <span className="font-medium truncate max-w-[60px]">
-                  {item.isYou ? "You" : item.name.split(" ")[0]}
-                </span>
-                <span className={cn("font-bold", item.isYou && "text-inherit")}>
-                  {item.score}
-                </span>
-              </div>
-            ))}
-          </div>
-          
-          {/* Status badges */}
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-3">
+          <Target className="h-4 w-4 text-primary" />
+          <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           <div className="flex items-center gap-2 ml-auto">
             <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2 py-0.5 font-medium">
               <CheckCircle className="h-3 w-3 mr-1" />
@@ -197,6 +166,38 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
               </Badge>
             )}
           </div>
+        </div>
+
+        {/* Competitor score cards with gradient coloring */}
+        <div className="grid grid-cols-6 gap-2 mb-4 pb-4 border-b border-border">
+          {allScores.slice(0, 6).map((item, idx) => {
+            // Color based on score: green (7+), yellow (5-7), red (<5)
+            const getScoreStyles = (score: number) => {
+              if (score >= 7) return "bg-[hsl(var(--rating-positive))]/10 border-[hsl(var(--rating-positive))]/30 text-[hsl(var(--rating-positive))]";
+              if (score >= 5) return "bg-amber-500/10 border-amber-500/30 text-amber-600";
+              return "bg-[hsl(var(--rating-negative))]/10 border-[hsl(var(--rating-negative))]/30 text-[hsl(var(--rating-negative))]";
+            };
+            
+            return (
+              <div 
+                key={item.name}
+                className={cn(
+                  "flex flex-col items-center justify-center p-2 rounded-lg border transition-all",
+                  getScoreStyles(item.score),
+                  item.isYou && "ring-2 ring-primary ring-offset-1"
+                )}
+              >
+                <span className="text-[10px] opacity-60 mb-0.5">#{idx + 1}</span>
+                <span className="text-xs font-medium truncate max-w-full text-center">
+                  {item.isYou ? "You" : item.name.split(" ")[0]}
+                </span>
+                <div className="flex items-baseline gap-0.5 mt-1">
+                  <span className="text-lg font-bold">{item.score}</span>
+                  <span className="text-[10px] opacity-60">/10</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* 4-column SWOT */}
