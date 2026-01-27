@@ -157,7 +157,7 @@ export const mockReviewAnalyticsData: ReviewAnalyticsData = {
     }
   ],
   improvingTrend: {
-    message: "266 reviews behind leader. ~22 months to catch up at current pace.",
+    message: "266 reviews behind Smile Dental Care. ~22 months to catch up at current pace.",
     behindBy: "266 reviews",
     percentile: "35th percentile"
   },
