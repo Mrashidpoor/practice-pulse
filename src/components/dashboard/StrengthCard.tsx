@@ -87,8 +87,8 @@ export function StrengthCard({ strength }: StrengthCardProps) {
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-4 flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0">
-                <CategoryIcon className="h-5 w-5 text-foreground" />
+              <div className="p-2 rounded-lg bg-[hsl(var(--rating-positive))]/10 shrink-0">
+                <CategoryIcon className="h-4 w-4 text-foreground" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-sm text-foreground">
