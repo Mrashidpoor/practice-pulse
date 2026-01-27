@@ -51,64 +51,62 @@ export function StrengthCard({ strength }: StrengthCardProps) {
 
   return (
     <Card className="bg-card border-border shadow-sm">
-      <CardContent className="p-5 space-y-4">
+      <CardContent className="p-4 space-y-3">
         {/* Header */}
         <div className="flex items-start gap-3">
-          <div className="p-2.5 rounded-xl bg-[hsl(var(--rating-positive))]/10">
-            <CheckCircle className="h-5 w-5 text-[hsl(var(--rating-positive))]" />
+          <div className="p-2 rounded-lg bg-[hsl(var(--rating-positive))]/10">
+            <CheckCircle className="h-4 w-4 text-[hsl(var(--rating-positive))]" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-foreground mb-1">{strength.category}</h3>
-            <p className="text-sm text-muted-foreground">{strength.description}</p>
+            <h3 className="font-semibold text-sm text-foreground">{strength.category}</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">{strength.description}</p>
           </div>
         </div>
 
-        {/* Patient Feedback Callout */}
-        <div className="bg-muted/50 rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Quote className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">What patients say</span>
+        {/* Patient Feedback Callout - green left border */}
+        <div className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-[hsl(var(--rating-positive))]/5 rounded-r-lg p-3">
+          <div className="flex items-center gap-1.5 mb-2">
+            <Quote className="h-3.5 w-3.5 text-[hsl(var(--rating-positive))]" />
+            <span className="text-xs font-semibold text-[hsl(var(--rating-positive))]">What patients say</span>
           </div>
 
-          <div className="relative">
-            <blockquote className="text-sm text-foreground mb-3 leading-relaxed">
-              "{feedback.quote}"
-            </blockquote>
-            
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <StarRating rating={feedback.stars} />
-                <span className="text-xs text-muted-foreground">
-                  <span className="font-medium">{feedback.reviewer}</span>
-                  <span className="mx-1">•</span>
-                  <span>{new Date(feedback.date).toLocaleDateString()}</span>
-                </span>
-              </div>
-              
-              {hasMultipleQuotes && (
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={prevQuote}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <span className="text-xs text-muted-foreground">
-                    {currentQuoteIndex + 1}/{strength.patientFeedback.length}
-                  </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7"
-                    onClick={nextQuote}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              )}
+          <blockquote className="text-xs text-muted-foreground mb-3 leading-relaxed">
+            "{feedback.quote}"
+          </blockquote>
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <StarRating rating={feedback.stars} />
+              <span className="text-xs text-muted-foreground">
+                <span className="font-medium">{feedback.reviewer}</span>
+                <span className="mx-1">•</span>
+                <span>{new Date(feedback.date).toLocaleDateString()}</span>
+              </span>
             </div>
+            
+            {hasMultipleQuotes && (
+              <div className="flex items-center gap-0.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={prevQuote}
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </Button>
+                <span className="text-xs text-muted-foreground min-w-[24px] text-center">
+                  {currentQuoteIndex + 1}/{strength.patientFeedback.length}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={nextQuote}
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </CardContent>

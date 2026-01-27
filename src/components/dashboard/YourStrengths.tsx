@@ -38,19 +38,19 @@ const StarRating = ({ rating }: { rating: number }) => (
 
 export function YourStrengths({ strengths, topEmployees }: YourStrengthsProps) {
   return (
-    <div className="space-y-6">
-      {/* Header Card */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl bg-[hsl(var(--rating-positive))]/10">
-              <CheckCircle className="h-6 w-6 text-[hsl(var(--rating-positive))]" />
+    <div>
+      {/* Header Card - attached to grid */}
+      <Card className="bg-card border-border shadow-sm rounded-b-none border-b-0">
+        <CardContent className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-[hsl(var(--rating-positive))]/10">
+              <CheckCircle className="h-5 w-5 text-[hsl(var(--rating-positive))]" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground mb-1">
+              <h2 className="text-base font-semibold text-foreground">
                 Top Strengths
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Your practice is doing well in these areas
               </p>
             </div>
@@ -58,42 +58,44 @@ export function YourStrengths({ strengths, topEmployees }: YourStrengthsProps) {
         </CardContent>
       </Card>
 
-      {/* Strength Cards */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {strengths.map((strength) => (
-          <StrengthCard key={strength.category} strength={strength} />
-        ))}
+      {/* Strength Cards Grid - connected container */}
+      <div className="border border-t-0 border-border rounded-b-lg bg-card p-3">
+        <div className="grid gap-3 md:grid-cols-2">
+          {strengths.map((strength) => (
+            <StrengthCard key={strength.category} strength={strength} />
+          ))}
+        </div>
       </div>
 
       {/* Top Rated Employees */}
       {topEmployees && topEmployees.length > 0 && (
-        <Card className="bg-card border-border shadow-sm">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">
+        <Card className="bg-card border-border shadow-sm mt-4">
+          <CardContent className="p-4">
+            <h3 className="text-sm font-semibold text-foreground mb-3">
               Top Employee Highlights
             </h3>
             <Table>
               <TableHeader>
                 <TableRow className="border-border">
-                  <TableHead className="text-muted-foreground">Name</TableHead>
-                  <TableHead className="text-muted-foreground">Description</TableHead>
-                  <TableHead className="text-muted-foreground text-right">Google rating</TableHead>
-                  <TableHead className="text-muted-foreground text-right"># of Reviews</TableHead>
+                  <TableHead className="text-muted-foreground text-xs">Name</TableHead>
+                  <TableHead className="text-muted-foreground text-xs">Description</TableHead>
+                  <TableHead className="text-muted-foreground text-xs text-right">Google rating</TableHead>
+                  <TableHead className="text-muted-foreground text-xs text-right"># of Reviews</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {topEmployees.map((employee) => (
                   <TableRow key={employee.name} className="border-border">
-                    <TableCell className="font-medium text-foreground">
+                    <TableCell className="font-medium text-foreground text-sm">
                       {employee.name}
                     </TableCell>
-                    <TableCell className="text-muted-foreground">
+                    <TableCell className="text-muted-foreground text-sm">
                       Known for being {employee.topPraiseKeywords.slice(0, 2).join(" and ")}.
                     </TableCell>
                     <TableCell className="text-right">
                       <StarRating rating={employee.rating} />
                     </TableCell>
-                    <TableCell className="text-right text-foreground">
+                    <TableCell className="text-right text-foreground text-sm">
                       {employee.mentionCount}
                     </TableCell>
                   </TableRow>
