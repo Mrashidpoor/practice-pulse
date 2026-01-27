@@ -10,51 +10,43 @@ interface MetricCardProps {
   showDifference?: boolean;
 }
 
-// Simple pie chart showing You vs Competitor proportion
-const ComparisonPie = ({ 
+// Comparison bar showing You vs Competitor
+const ComparisonBar = ({ 
   yourValue, 
   competitorValue,
-  size = 40
+  isAhead
 }: { 
   yourValue: number; 
   competitorValue: number;
-  size?: number;
+  isAhead: boolean;
 }) => {
-  const total = yourValue + competitorValue;
-  const yourPercentage = total > 0 ? (yourValue / total) * 100 : 50;
-  const isAhead = yourValue > competitorValue;
-  
-  // Calculate the stroke-dasharray for pie segments
-  const circumference = Math.PI * (size - 4); // radius = (size-4)/2, so diameter = size-4
-  const yourDash = (yourPercentage / 100) * circumference;
-  const competitorDash = circumference - yourDash;
+  const maxValue = Math.max(yourValue, competitorValue);
+  const yourWidth = maxValue > 0 ? (yourValue / maxValue) * 100 : 0;
+  const compWidth = maxValue > 0 ? (competitorValue / maxValue) * 100 : 0;
 
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Background circle (competitor portion) */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={(size - 4) / 2}
-          fill="none"
-          stroke="hsl(var(--muted))"
-          strokeWidth={4}
-        />
-        {/* Your portion */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={(size - 4) / 2}
-          fill="none"
-          stroke={isAhead ? "hsl(var(--rating-positive))" : "hsl(var(--rating-negative))"}
-          strokeWidth={4}
-          strokeDasharray={`${yourDash} ${competitorDash}`}
-          strokeDashoffset={circumference / 4} // Start from top
-          strokeLinecap="round"
-          className="transition-all duration-500"
-        />
-      </svg>
+    <div className="space-y-1 w-full">
+      <div className="flex items-center gap-1.5">
+        <span className="text-[9px] text-muted-foreground w-6">You</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div 
+            className={cn(
+              "h-full rounded-full transition-all duration-500",
+              isAhead ? "bg-[hsl(var(--rating-positive))]" : "bg-[hsl(var(--rating-negative))]"
+            )}
+            style={{ width: `${yourWidth}%` }}
+          />
+        </div>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <span className="text-[9px] text-muted-foreground w-6">Comp</span>
+        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+          <div 
+            className="h-full rounded-full bg-muted-foreground/40 transition-all duration-500"
+            style={{ width: `${compWidth}%` }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -73,12 +65,13 @@ export function MetricCard({
   const isBehind = difference < 0;
 
   return (
-    <div className="flex flex-col items-center gap-1.5 text-center">
-      <ComparisonPie yourValue={yourNum} competitorValue={compNum} size={36} />
+    <div className="flex flex-col gap-1.5">
+      <h4 className="text-[10px] font-medium text-muted-foreground">{title}</h4>
       
-      <div className="space-y-0.5">
-        <h4 className="text-[10px] font-medium text-muted-foreground leading-tight">{title}</h4>
-        <div className="flex items-baseline justify-center gap-1">
+      <ComparisonBar yourValue={yourNum} competitorValue={compNum} isAhead={isAhead} />
+      
+      <div className="flex items-center justify-between">
+        <div className="flex items-baseline gap-1">
           <span className="text-sm font-bold text-foreground">{yourValue}</span>
           <span className="text-[10px] text-muted-foreground">vs {competitorValue}</span>
         </div>
@@ -86,7 +79,7 @@ export function MetricCard({
         {showDifference && (
           <span
             className={cn(
-              "flex items-center justify-center gap-0.5 text-[10px] font-medium",
+              "flex items-center gap-0.5 text-[10px] font-medium",
               isAhead && "text-[hsl(var(--rating-positive))]",
               isBehind && "text-[hsl(var(--rating-negative))]",
               !isAhead && !isBehind && "text-muted-foreground"

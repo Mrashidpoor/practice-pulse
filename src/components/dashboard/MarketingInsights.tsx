@@ -37,49 +37,32 @@ export function MarketingInsights({
 
   return (
     <div className="space-y-4">
-      {/* Section 1: Competitive Position Banner - compact */}
+      {/* Combined: Reputation Momentum + Review Metrics */}
       <Card className="bg-card border-border shadow-sm">
         <CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-              <TrendingUp className="h-4 w-4 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <h3 className="font-semibold text-sm text-foreground">Reputation Momentum</h3>
-                <div className="flex gap-1.5">
-                  <Badge variant="outline" className="bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5">
-                    Behind by {improvingTrend.behindBy}
-                  </Badge>
-                  <Badge variant="outline" className="bg-muted text-muted-foreground border-0 text-xs px-2 py-0.5">
-                    {improvingTrend.percentile}
-                  </Badge>
-                </div>
+          {/* Header row */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-primary/10 shrink-0">
+                <TrendingUp className="h-4 w-4 text-primary" />
               </div>
-              <p className="text-xs text-muted-foreground mt-1 line-clamp-1">{improvingTrend.message}</p>
+              <div>
+                <h3 className="font-semibold text-sm text-foreground">Reputation Momentum</h3>
+                <p className="text-xs text-muted-foreground line-clamp-1">{improvingTrend.message}</p>
+              </div>
+            </div>
+            <div className="flex gap-1.5 shrink-0">
+              <Badge variant="outline" className="bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0 text-xs px-2 py-0.5">
+                Behind by {improvingTrend.behindBy}
+              </Badge>
+              <Badge variant="outline" className="bg-muted text-muted-foreground border-0 text-xs px-2 py-0.5">
+                {improvingTrend.percentile}
+              </Badge>
             </div>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Section 2: Review Metrics - single row with pie charts */}
-      <Card className="bg-card border-border shadow-sm">
-        <CardContent className="p-3">
-          <div className="flex items-center gap-2 mb-3">
-            <BarChart3 className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold text-foreground">Review Metrics</h3>
-            <div className="ml-auto flex items-center gap-2 text-[10px]">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[hsl(var(--rating-positive))]" />
-                You
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-muted" />
-                Competitor
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
+          {/* Metrics row */}
+          <div className="grid grid-cols-4 gap-4 pt-3 border-t border-border">
             <MetricCard
               title="Total Reviews"
               yourValue={metrics.totalReviews}
