@@ -1,10 +1,11 @@
-import { TrendingUp, Target, Calendar } from "lucide-react";
+import { TrendingUp, Target, Calendar, Zap, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MetricCard } from "./MetricCard";
 import { SentimentBreakdown } from "./SentimentBreakdown";
 import { SWOTGrid } from "./SWOTGrid";
 import { RecommendationCard } from "./RecommendationCard";
+import { Progress } from "@/components/ui/progress";
 import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
 import type {
   ImprovingTrend,
@@ -97,29 +98,61 @@ export function MarketingInsights({
             </div>
           </div>
 
-          {/* Monthly Target + Trend Chart Row */}
-          <div className="grid grid-cols-2 gap-4 pt-4 mt-4 border-t border-border">
-            {/* Monthly Target */}
-            <div className="flex items-center gap-3">
-              <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
-                <Target className="h-4 w-4 text-primary" />
+          {/* Monthly Target + Action Stats + Trend Chart Row */}
+          <div className="grid grid-cols-3 gap-4 pt-4 mt-4 border-t border-border">
+            {/* Monthly Target with Progress */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-md bg-primary/10 shrink-0">
+                  <Target className="h-4 w-4 text-primary" />
+                </div>
+                <h4 className="text-xs font-medium text-muted-foreground">Monthly Target</h4>
               </div>
-              <div>
-                <h4 className="text-xs font-medium text-muted-foreground mb-1">Monthly Target</h4>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-foreground">{monthlyTarget.current}</span>
-                  <span className="text-xs text-muted-foreground">→</span>
-                  <span className="text-sm font-bold text-primary">{monthlyTarget.target}</span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-foreground">{monthlyTarget.current}</span>
+                  <span className="text-lg font-bold text-primary">{monthlyTarget.target}</span>
+                </div>
+                <Progress value={75} className="h-2" />
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                  <span>Current avg</span>
                   <Badge className="bg-primary/10 text-primary border-0 text-[10px] px-1.5 py-0">
-                    +{monthlyTarget.percentageIncrease}
+                    +{monthlyTarget.percentageIncrease} needed
                   </Badge>
+                  <span>Goal</span>
                 </div>
               </div>
             </div>
 
+            {/* Catch-up Stats */}
+            <div className="space-y-3 border-l border-border pl-4">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-md bg-[hsl(var(--rating-positive))]/10 shrink-0">
+                  <Zap className="h-4 w-4 text-[hsl(var(--rating-positive))]" />
+                </div>
+                <h4 className="text-xs font-medium text-muted-foreground">Weekly Breakdown</h4>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-muted/50 rounded-lg p-2 text-center">
+                  <div className="text-lg font-bold text-foreground">4</div>
+                  <div className="text-[10px] text-muted-foreground">Reviews/week</div>
+                </div>
+                <div className="bg-muted/50 rounded-lg p-2 text-center">
+                  <div className="text-lg font-bold text-foreground">22</div>
+                  <div className="text-[10px] text-muted-foreground">Months to parity</div>
+                </div>
+              </div>
+              {monthlyTarget.seasonalMessage && (
+                <div className="flex items-start gap-1.5 text-[10px] text-primary">
+                  <Clock className="h-3 w-3 mt-0.5 shrink-0" />
+                  <span className="line-clamp-2">{monthlyTarget.seasonalMessage}</span>
+                </div>
+              )}
+            </div>
+
             {/* Mini Trend Chart */}
             {improvingTrend.monthlyData && (
-              <div className="flex flex-col">
+              <div className="flex flex-col border-l border-border pl-4">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs font-medium text-muted-foreground">12 Month Trend</span>
                   <div className="flex items-center gap-3 text-[10px]">
@@ -133,7 +166,7 @@ export function MarketingInsights({
                     </span>
                   </div>
                 </div>
-                <div className="h-16">
+                <div className="h-16 flex-1">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={improvingTrend.monthlyData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                       <defs>
