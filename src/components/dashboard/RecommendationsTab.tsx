@@ -115,7 +115,7 @@ function RecommendationCard({ recommendation }: RecommendationCardProps) {
             </Badge>
             <span className="flex items-center gap-1 text-muted-foreground">
               <Target className="h-3 w-3 text-primary shrink-0" />
-              <span className="truncate max-w-[200px]">{recommendation.impact}</span>
+              <span>{recommendation.impact}</span>
             </span>
           </div>
         </div>
