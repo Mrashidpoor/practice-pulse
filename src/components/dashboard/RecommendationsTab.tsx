@@ -56,13 +56,11 @@ function getRecommendationIcon(title: string) {
   return TrendingUp;
 }
 
-interface RecommendationRowProps {
+interface RecommendationCardProps {
   recommendation: MarketingRecommendation;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
-function RecommendationRow({ recommendation, isFirst, isLast }: RecommendationRowProps) {
+function RecommendationCard({ recommendation }: RecommendationCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const config = priorityConfig[recommendation.priority];
   const timeframe = timeframeConfig[recommendation.timeframe];
@@ -71,26 +69,16 @@ function RecommendationRow({ recommendation, isFirst, isLast }: RecommendationRo
   const actionSteps = recommendation.description.split('. ').filter(s => s.length > 0);
 
   return (
-    <div 
-      className={cn(
-        "relative bg-card border-x border-border transition-all duration-200 cursor-pointer hover:bg-muted/30",
-        isFirst && "border-t rounded-t-xl",
-        isLast && !isExpanded && "border-b rounded-b-xl",
-        !isLast && "border-b",
-        isExpanded && isLast && "border-b rounded-b-xl"
-      )}
+    <Card 
+      className="relative overflow-hidden transition-all duration-200 cursor-pointer hover:bg-muted/30 border-border"
       onClick={() => setIsExpanded(!isExpanded)}
     >
       {/* Priority indicator bar */}
-      <div className={cn(
-        "absolute left-0 top-0 bottom-0 w-1",
-        isFirst && "rounded-tl-xl",
-        isLast && "rounded-bl-xl",
-        config.bar
-      )} />
+      <div className={cn("absolute left-0 top-0 bottom-0 w-1 rounded-l-xl", config.bar)} />
 
-      {/* Main row content */}
-      <div className="flex items-center gap-4 p-4 pl-5">
+      <CardContent className="p-0">
+        {/* Main row content */}
+        <div className="flex items-center gap-4 p-4 pl-5">
         {/* Icon */}
         <div className={cn("relative p-2.5 rounded-xl shrink-0", config.iconBg)}>
           <Icon className={cn("h-5 w-5", config.icon)} />
@@ -144,61 +132,62 @@ function RecommendationRow({ recommendation, isFirst, isLast }: RecommendationRo
           "h-4 w-4 text-muted-foreground transition-transform duration-200 shrink-0",
           isExpanded && "rotate-180"
         )} />
-      </div>
+        </div>
 
-      {/* Expanded content */}
-      <div className={cn(
-        "grid transition-all duration-200 ease-out",
-        isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-      )}>
-        <div className="overflow-hidden">
-          <div className="border-t border-border bg-muted/40 p-4 pl-5 space-y-4">
-            {/* Action steps */}
-            <div className="space-y-2">
-              <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                Action Steps
-              </h5>
-              <div className="space-y-1.5">
-                {actionSteps.map((step, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <CheckCircle className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
-                    <span className="text-sm text-foreground leading-relaxed">{step.trim()}.</span>
+        {/* Expanded content */}
+        <div className={cn(
+          "grid transition-all duration-200 ease-out",
+          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}>
+          <div className="overflow-hidden">
+            <div className="border-t border-border bg-muted/40 p-4 pl-5 space-y-4">
+              {/* Action steps */}
+              <div className="space-y-2">
+                <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                  <Zap className="h-3.5 w-3.5 text-primary" />
+                  Action Steps
+                </h5>
+                <div className="space-y-1.5">
+                  {actionSteps.map((step, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <CheckCircle className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
+                      <span className="text-sm text-foreground leading-relaxed">{step.trim()}.</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Impact & Audience */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-card rounded-lg p-3 border border-border">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+                    <Sparkles className="h-3 w-3 text-primary" />
+                    Expected Impact
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Impact & Audience */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-card rounded-lg p-3 border border-border">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                  <Sparkles className="h-3 w-3 text-primary" />
-                  Expected Impact
+                  <p className="text-xs text-foreground">{recommendation.impact}</p>
                 </div>
-                <p className="text-xs text-foreground">{recommendation.impact}</p>
-              </div>
-              <div className="bg-card rounded-lg p-3 border border-border">
-                <div className="flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">
-                  <Users className="h-3 w-3 text-primary" />
-                  Target Audience
+                <div className="bg-card rounded-lg p-3 border border-border">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+                    <Users className="h-3 w-3 text-primary" />
+                    Target Audience
+                  </div>
+                  <p className="text-xs text-foreground">{recommendation.audience}</p>
                 </div>
-                <p className="text-xs text-foreground">{recommendation.audience}</p>
               </div>
-            </div>
 
-            {/* CTA */}
-            <button 
-              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Start Implementation
-              <ArrowRight className="h-4 w-4" />
-            </button>
+              {/* CTA */}
+              <button 
+                className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Start Implementation
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -273,14 +262,12 @@ export function RecommendationsTab({ recommendations, seasonalTips }: Recommenda
         </CardContent>
       </Card>
 
-      {/* Connected recommendations list */}
-      <div className="shadow-sm">
+      {/* Recommendations list */}
+      <div className="space-y-3">
         {sortedRecommendations.map((rec, index) => (
-          <RecommendationRow 
+          <RecommendationCard 
             key={index} 
-            recommendation={rec} 
-            isFirst={index === 0}
-            isLast={index === sortedRecommendations.length - 1}
+            recommendation={rec}
           />
         ))}
       </div>
