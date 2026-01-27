@@ -212,10 +212,7 @@ export function MarketingInsights({
       </Card>
 
       {/* SWOT Analysis */}
-      <div>
-        <h3 className="text-sm font-semibold text-foreground mb-2">SWOT Analysis</h3>
-        <SWOTGrid swot={swotAnalysis} />
-      </div>
+      <SWOTGrid swot={swotAnalysis} />
 
       {/* Marketing Recommendations */}
       <div>
