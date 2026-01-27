@@ -131,27 +131,23 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
       <CardContent className="p-4">
         {/* Summary header */}
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-border">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
-              <Target className="h-4 w-4 text-primary" />
-              <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
-            </div>
+          <div className="flex items-center gap-2">
+            <Target className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[hsl(var(--rating-positive))]" />
-                <span className="text-muted-foreground">Strong: <span className="font-medium text-foreground">2</span></span>
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[hsl(var(--rating-negative))]" />
-                <span className="text-muted-foreground">Needs work: <span className="font-medium text-foreground">1</span></span>
-              </span>
-            </div>
-            <div className="flex items-center gap-1 pl-3 border-l border-border">
-              <span className="text-xs text-muted-foreground">Score:</span>
+          <div className="flex items-center gap-3">
+            <Badge className="bg-[hsl(var(--rating-positive))]/15 text-[hsl(var(--rating-positive))] border-0 text-xs px-2.5 py-1 font-medium">
+              <CheckCircle className="h-3 w-3 mr-1" />
+              2 Strong
+            </Badge>
+            <Badge className="bg-[hsl(var(--rating-negative))]/15 text-[hsl(var(--rating-negative))] border-0 text-xs px-2.5 py-1 font-medium">
+              <XCircle className="h-3 w-3 mr-1" />
+              1 Needs Work
+            </Badge>
+            <div className="flex items-center gap-1.5 pl-3 border-l border-border bg-primary/10 rounded-md px-3 py-1">
+              <span className="text-xs text-primary font-medium">Score</span>
               <span className="text-xl font-bold text-primary">{overallScore}</span>
-              <span className="text-xs text-muted-foreground">/10</span>
+              <span className="text-xs text-primary/70">/10</span>
             </div>
           </div>
         </div>
