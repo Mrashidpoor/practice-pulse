@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Lightbulb, Star } from "lucide-react";
+import { ChevronDown, ChevronUp, Lightbulb, Star, ShieldAlert, Receipt, Heart, Clock, User, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -11,34 +11,29 @@ interface ImprovementCardProps {
   rank: number;
 }
 
-// Emoji mapping for categories
-const categoryEmojis: Record<string, string> = {
-  "Overtreatment Concerns / Trust": "🛡️",
-  "Billing & Insurance Transparency": "💳",
-  "Dentist Anxiety & Emotional Comfort": "💆",
-  "Wait Times & Scheduling": "⏰",
-  "shield-alert": "🛡️",
-  "receipt": "💳",
-  "heart": "💆",
-  "clock": "⏰",
-  "user-check": "👤",
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  "shield-alert": ShieldAlert,
+  "receipt": Receipt,
+  "heart": Heart,
+  "clock": Clock,
+  "user-check": User,
 };
 
 // Priority tag based on rank
 const getPriorityTag = (rank: number): { label: string; className: string } => {
   if (rank === 1) {
     return {
-      label: "⚠️ Important",
+      label: "Important",
       className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-0",
     };
   } else if (rank <= 3) {
     return {
-      label: "📋 Needs Improvement",
+      label: "Needs Improvement",
       className: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 border-0",
     };
   } else {
     return {
-      label: "💡 Consider",
+      label: "Consider",
       className: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border-0",
     };
   }
@@ -64,7 +59,7 @@ const StarRating = ({ rating, color = "orange" }: { rating: number; color?: "ora
 
 export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const emoji = categoryEmojis[advantage.icon] || categoryEmojis[advantage.category] || "📌";
+  const Icon = iconMap[advantage.icon] || ShieldAlert;
   const priorityTag = getPriorityTag(rank);
 
   return (
@@ -73,8 +68,8 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
         <CollapsibleTrigger asChild>
           <button className="w-full text-left">
             <div className="p-5 flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center text-xl">
-                {emoji}
+              <div className="p-2.5 rounded-xl bg-muted">
+                <Icon className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -101,11 +96,11 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
           <CardContent className="pt-0 pb-5 px-5 space-y-4">
             {/* Two-column comparison */}
             <div className="grid md:grid-cols-2 gap-4">
-              {/* Patient's Experience (Left - Orange accent) */}
+              {/* Patient's Experience (Left - Amber/Orange accent) */}
               <Card className="border-l-4 border-l-amber-400 bg-muted/30 border-t-0 border-r-0 border-b-0">
                 <CardContent className="p-4">
                   <h4 className="text-sm font-semibold text-amber-600 dark:text-amber-400 mb-3">
-                    😟 Patient's Experience
+                    Patient's Experience
                   </h4>
                   <blockquote className="text-sm text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.userComplaint.quote}"
@@ -125,7 +120,7 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
               <Card className="border-l-4 border-l-[hsl(var(--rating-positive))] bg-muted/30 border-t-0 border-r-0 border-b-0">
                 <CardContent className="p-4">
                   <h4 className="text-sm font-semibold text-[hsl(var(--rating-positive))] mb-3">
-                    ✨ How {advantage.competitorQuote.competitorName} Does It
+                    How {advantage.competitorQuote.competitorName} Does It
                   </h4>
                   <blockquote className="text-sm text-muted-foreground mb-3 leading-relaxed">
                     "{advantage.competitorQuote.quote}"
@@ -140,15 +135,18 @@ export function ImprovementCard({ advantage, rank }: ImprovementCardProps) {
               </Card>
             </div>
 
-            {/* Recommendation - Shiny card */}
-            <Card className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-primary/20 shadow-lg">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse opacity-50" />
+            {/* Recommendation - Shiny card with gradient */}
+            <Card className="relative overflow-hidden border-primary/30 shadow-md bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
+              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-pulse" />
               <CardContent className="p-4 flex gap-3 relative">
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                <div className="p-2 rounded-lg bg-primary/15 shrink-0">
                   <Lightbulb className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-1">💡 Recommendation</h4>
+                  <h4 className="text-sm font-semibold text-foreground mb-1 flex items-center gap-1.5">
+                    Recommendation
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                  </h4>
                   <p className="text-sm text-muted-foreground">{advantage.competitorQuote.recommendation}</p>
                 </div>
               </CardContent>
