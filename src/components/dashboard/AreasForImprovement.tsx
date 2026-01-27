@@ -1,5 +1,6 @@
-import { AlertTriangle } from "lucide-react";
+import { XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { ImprovementCard } from "./ImprovementCard";
 import type { CompetitiveComparison } from "@/types/review-analytics";
 
@@ -12,36 +13,38 @@ export function AreasForImprovement({ data }: AreasForImprovementProps) {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <p className="text-muted-foreground">
-          These are areas where competitors are outperforming your practice based on patient reviews
-        </p>
-      </div>
-
-      {/* Focus Banner */}
-      <div className="bg-gradient-to-r from-improvement/20 to-improvement/10 border border-improvement/30 rounded-lg p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <AlertTriangle className="h-5 w-5 text-improvement" />
-          <h3 className="font-semibold text-foreground">
-            Focus on these {topCategories.length} areas to improve your competitive position
-          </h3>
-        </div>
-        
-        {/* Quick-Access Chips */}
-        <div className="flex flex-wrap gap-2">
-          {topCategories.map((advantage, index) => (
-            <Badge
-              key={advantage.category}
-              variant="outline"
-              className="bg-background hover:bg-improvement/10 cursor-pointer transition-colors border-improvement/40 text-foreground"
-            >
-              <span className="text-improvement font-bold mr-1">#{index + 1}</span>
-              {advantage.category}
-            </Badge>
-          ))}
-        </div>
-      </div>
+      {/* Header Card */}
+      <Card className="bg-card border-border shadow-sm">
+        <CardContent className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3 rounded-xl bg-[hsl(var(--rating-negative))]/10">
+              <XCircle className="h-6 w-6 text-[hsl(var(--rating-negative))]" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-foreground mb-2">
+                Common Weaknesses
+              </h2>
+              <p className="text-muted-foreground mb-4">
+                Improvements in these areas are recommended based on patient reviews
+              </p>
+              
+              {/* Quick-Access Chips */}
+              <div className="flex flex-wrap gap-2">
+                {topCategories.map((advantage, index) => (
+                  <Badge
+                    key={advantage.category}
+                    variant="outline"
+                    className="bg-muted hover:bg-muted/80 cursor-pointer transition-colors border-border text-foreground px-3 py-1.5"
+                  >
+                    <XCircle className="h-3.5 w-3.5 mr-1.5 text-[hsl(var(--rating-negative))]" />
+                    {advantage.category}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Improvement Cards */}
       <div className="space-y-4">

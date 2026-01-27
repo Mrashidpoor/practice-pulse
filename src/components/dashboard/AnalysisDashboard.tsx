@@ -11,12 +11,12 @@ interface AnalysisDashboardProps {
 
 export function AnalysisDashboard({ data }: AnalysisDashboardProps) {
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full">
       <Tabs defaultValue="improvement" className="w-full">
-        <TabsList className="w-full h-auto p-1 bg-muted/50 flex flex-wrap justify-start sm:justify-center gap-1">
+        <TabsList className="w-full h-auto p-1.5 bg-card border border-border rounded-xl flex flex-wrap justify-start sm:justify-center gap-1 shadow-sm">
           <TabsTrigger
             value="improvement"
-            className="flex items-center gap-2 data-[state=active]:bg-improvement/20 data-[state=active]:text-improvement-foreground px-4 py-2.5"
+            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all"
           >
             <AlertTriangle className="h-4 w-4" />
             <span className="hidden sm:inline">Areas for Improvement</span>
@@ -24,7 +24,7 @@ export function AnalysisDashboard({ data }: AnalysisDashboardProps) {
           </TabsTrigger>
           <TabsTrigger
             value="strengths"
-            className="flex items-center gap-2 data-[state=active]:bg-strength/20 data-[state=active]:text-strength px-4 py-2.5"
+            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all"
           >
             <Trophy className="h-4 w-4" />
             <span className="hidden sm:inline">Your Strengths</span>
@@ -32,7 +32,7 @@ export function AnalysisDashboard({ data }: AnalysisDashboardProps) {
           </TabsTrigger>
           <TabsTrigger
             value="marketing"
-            className="flex items-center gap-2 data-[state=active]:bg-metrics/20 data-[state=active]:text-metrics px-4 py-2.5"
+            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm transition-all"
           >
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Marketing Insights</span>

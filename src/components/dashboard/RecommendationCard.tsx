@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, Target, Users } from "lucide-react";
+import { Clock, Target, Users } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { MarketingRecommendation } from "@/types/review-analytics";
@@ -10,16 +10,16 @@ interface RecommendationCardProps {
 
 const priorityStyles = {
   high: {
-    badge: "bg-destructive/10 text-destructive border-destructive/30",
-    border: "border-l-destructive",
+    badge: "bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0",
+    dot: "bg-[hsl(var(--rating-negative))]",
   },
   medium: {
-    badge: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-300 dark:border-orange-700",
-    border: "border-l-orange-400",
+    badge: "bg-[hsl(var(--rating-neutral))]/10 text-[hsl(var(--rating-neutral))] border-0",
+    dot: "bg-[hsl(var(--rating-neutral))]",
   },
   low: {
-    badge: "bg-muted text-muted-foreground border-border",
-    border: "border-l-muted-foreground",
+    badge: "bg-muted text-muted-foreground border-0",
+    dot: "bg-muted-foreground",
   },
 };
 
@@ -33,14 +33,15 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
   const styles = priorityStyles[recommendation.priority];
 
   return (
-    <Card className={cn("border-l-4", styles.border)}>
-      <CardContent className="p-4 space-y-3">
+    <Card className="bg-card border-border shadow-sm">
+      <CardContent className="p-5 space-y-4">
         {/* Header with badges */}
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="outline" className={cn("text-xs uppercase", styles.badge)}>
+          <Badge className={cn("text-xs uppercase", styles.badge)}>
+            <span className={cn("w-1.5 h-1.5 rounded-full mr-1.5", styles.dot)} />
             {recommendation.priority} Priority
           </Badge>
-          <Badge variant="outline" className="text-xs bg-muted/50">
+          <Badge variant="outline" className="text-xs bg-muted border-0">
             <Clock className="h-3 w-3 mr-1" />
             {timeframeLabels[recommendation.timeframe]}
           </Badge>
@@ -48,23 +49,23 @@ export function RecommendationCard({ recommendation }: RecommendationCardProps) 
 
         {/* Title & Description */}
         <div>
-          <h4 className="font-semibold text-foreground mb-1">{recommendation.title}</h4>
-          <p className="text-sm text-muted-foreground">{recommendation.description}</p>
+          <h4 className="font-semibold text-foreground mb-1.5">{recommendation.title}</h4>
+          <p className="text-sm text-muted-foreground leading-relaxed">{recommendation.description}</p>
         </div>
 
         {/* Impact & Audience */}
-        <div className="grid gap-2 sm:grid-cols-2 pt-2 border-t border-border/50">
-          <div className="flex items-start gap-2">
-            <Target className="h-4 w-4 text-metrics shrink-0 mt-0.5" />
+        <div className="grid gap-3 sm:grid-cols-2 pt-3 border-t border-border">
+          <div className="flex items-start gap-2.5">
+            <Target className="h-4 w-4 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-medium text-muted-foreground">Impact</span>
+              <span className="text-xs font-medium text-muted-foreground block mb-0.5">Impact</span>
               <p className="text-sm text-foreground">{recommendation.impact}</p>
             </div>
           </div>
-          <div className="flex items-start gap-2">
-            <Users className="h-4 w-4 text-metrics shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5">
+            <Users className="h-4 w-4 text-primary shrink-0 mt-0.5" />
             <div>
-              <span className="text-xs font-medium text-muted-foreground">Target Audience</span>
+              <span className="text-xs font-medium text-muted-foreground block mb-0.5">Target Audience</span>
               <p className="text-sm text-foreground">{recommendation.audience}</p>
             </div>
           </div>

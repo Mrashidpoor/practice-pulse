@@ -36,19 +36,22 @@ export function MarketingInsights({
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Section 1: Competitive Position Banner */}
-      <Card className="bg-gradient-to-r from-metrics/10 to-metrics/5 border-metrics/20">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <TrendingUp className="h-5 w-5 text-metrics shrink-0 mt-0.5" />
+      <Card className="bg-card border-border shadow-sm">
+        <CardContent className="p-5">
+          <div className="flex items-start gap-4">
+            <div className="p-2.5 rounded-xl bg-primary/10">
+              <TrendingUp className="h-5 w-5 text-primary" />
+            </div>
             <div className="flex-1">
-              <p className="text-foreground">{improvingTrend.message}</p>
-              <div className="flex flex-wrap gap-2 mt-3">
-                <Badge variant="outline" className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border-orange-300">
+              <h3 className="font-semibold text-foreground mb-2">Reputation Momentum</h3>
+              <p className="text-muted-foreground text-sm mb-3">{improvingTrend.message}</p>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="bg-[hsl(var(--rating-negative))]/10 text-[hsl(var(--rating-negative))] border-0">
                   Behind by {improvingTrend.behindBy}
                 </Badge>
-                <Badge variant="outline" className="bg-muted text-muted-foreground">
+                <Badge variant="outline" className="bg-muted text-muted-foreground border-0">
                   {improvingTrend.percentile}
                 </Badge>
               </div>
@@ -60,7 +63,7 @@ export function MarketingInsights({
       {/* Section 2: Review Metrics Grid */}
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-          <BarChart3 className="h-5 w-5 text-metrics" />
+          <BarChart3 className="h-5 w-5 text-primary" />
           Review Metrics Comparison
         </h3>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -89,27 +92,29 @@ export function MarketingInsights({
       </div>
 
       {/* Section 3: Monthly Review Target */}
-      <Card className="border-teal-200 dark:border-teal-800 bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-950/20 dark:to-cyan-950/20">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <Target className="h-5 w-5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+      <Card className="bg-card border-border shadow-sm">
+        <CardContent className="p-5">
+          <div className="flex items-start gap-4">
+            <div className="p-2.5 rounded-xl bg-primary/10">
+              <Target className="h-5 w-5 text-primary" />
+            </div>
             <div className="flex-1">
-              <h4 className="font-semibold text-foreground mb-2">Monthly Review Target</h4>
-              <div className="flex flex-wrap items-baseline gap-4">
+              <h4 className="font-semibold text-foreground mb-3">Monthly Review Target</h4>
+              <div className="flex flex-wrap items-baseline gap-6">
                 <div>
-                  <span className="text-sm text-muted-foreground">Current: </span>
-                  <span className="text-lg font-bold text-foreground">{monthlyTarget.current}</span>
+                  <span className="text-xs text-muted-foreground block mb-1">Current</span>
+                  <span className="text-2xl font-bold text-foreground">{monthlyTarget.current}</span>
                 </div>
                 <div>
-                  <span className="text-sm text-muted-foreground">Target: </span>
-                  <span className="text-lg font-bold text-teal-600 dark:text-teal-400">{monthlyTarget.target}</span>
+                  <span className="text-xs text-muted-foreground block mb-1">Target</span>
+                  <span className="text-2xl font-bold text-primary">{monthlyTarget.target}</span>
                 </div>
-                <Badge className="bg-teal-600 text-white hover:bg-teal-700">
+                <Badge className="bg-primary text-primary-foreground hover:bg-primary/90">
                   {monthlyTarget.percentageIncrease} increase needed
                 </Badge>
               </div>
               {monthlyTarget.seasonalMessage && (
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground mt-3">
                   💡 {monthlyTarget.seasonalMessage}
                 </p>
               )}
@@ -138,13 +143,13 @@ export function MarketingInsights({
       {seasonalTips && seasonalTips.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-metrics" />
+            <Calendar className="h-5 w-5 text-primary" />
             Seasonal Marketing Tips
           </h3>
           <div className="grid gap-4 sm:grid-cols-2">
             {seasonalTips.map((tip) => (
-              <Card key={tip.month} className="border-border/50">
-                <CardContent className="p-4">
+              <Card key={tip.month} className="bg-card border-border shadow-sm">
+                <CardContent className="p-5">
                   <h4 className="font-semibold text-foreground mb-2">{tip.month}</h4>
                   <p className="text-sm text-muted-foreground">{tip.tip}</p>
                 </CardContent>

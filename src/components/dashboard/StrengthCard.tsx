@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, CheckCircle, Quote, Star, UserCheck, Smile } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { ClinicStrength } from "@/types/review-analytics";
 import { cn } from "@/lib/utils";
@@ -23,7 +22,9 @@ const StarRating = ({ rating }: { rating: number }) => (
         key={star}
         className={cn(
           "h-3.5 w-3.5",
-          star <= rating ? "fill-strength text-strength" : "text-muted-foreground/30"
+          star <= rating 
+            ? "fill-[hsl(var(--rating-neutral))] text-[hsl(var(--rating-neutral))]"
+            : "text-border"
         )}
       />
     ))}
@@ -49,34 +50,28 @@ export function StrengthCard({ strength }: StrengthCardProps) {
   };
 
   return (
-    <Card className="border-l-4 border-l-strength border-strength/20 bg-card overflow-hidden">
-      <CardContent className="p-4 space-y-4">
+    <Card className="bg-card border-border shadow-sm">
+      <CardContent className="p-5 space-y-4">
         {/* Header */}
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-strength/10">
-            <Icon className="h-5 w-5 text-strength" />
+          <div className="p-2.5 rounded-xl bg-[hsl(var(--rating-positive))]/10">
+            <CheckCircle className="h-5 w-5 text-[hsl(var(--rating-positive))]" />
           </div>
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="font-semibold text-foreground">{strength.category}</h3>
-              <Badge className="bg-strength/20 text-strength hover:bg-strength/30 text-xs">
-                <CheckCircle className="h-3 w-3 mr-1" />
-                Strength
-              </Badge>
-            </div>
+            <h3 className="font-semibold text-foreground mb-1">{strength.category}</h3>
             <p className="text-sm text-muted-foreground">{strength.description}</p>
           </div>
         </div>
 
         {/* Patient Feedback Callout */}
-        <div className="bg-strength/5 border border-strength/20 rounded-lg p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Quote className="h-4 w-4 text-strength" />
-            <span className="text-sm font-medium text-strength">Patients love this</span>
+            <Quote className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-primary">What patients say</span>
           </div>
 
           <div className="relative">
-            <blockquote className="text-sm italic text-strength/90 mb-3">
+            <blockquote className="text-sm text-foreground mb-3 leading-relaxed">
               "{feedback.quote}"
             </blockquote>
             
