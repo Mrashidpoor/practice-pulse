@@ -136,16 +136,16 @@ export function SWOTGrid({ swot }: SWOTGridProps) {
             <span className="text-sm font-semibold text-foreground">SWOT Analysis</span>
           </div>
           
-          {/* Scores comparison */}
-          <div className="flex items-center gap-1.5 bg-primary/10 rounded-md px-2.5 py-1">
-            <span className="text-xs text-primary font-medium">You:</span>
-            <span className="text-base font-bold text-primary">{overallScore}</span>
-            <span className="text-[10px] text-primary/70">/10</span>
+          {/* Scores comparison - lower score gets red, higher gets green */}
+          <div className="flex items-center gap-1.5 bg-[hsl(var(--rating-negative))]/10 rounded-md px-2.5 py-1">
+            <span className="text-xs text-[hsl(var(--rating-negative))] font-medium">You:</span>
+            <span className="text-base font-bold text-[hsl(var(--rating-negative))]">{overallScore}</span>
+            <span className="text-[10px] text-[hsl(var(--rating-negative))]/70">/10</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-muted rounded-md px-2.5 py-1">
-            <span className="text-xs text-muted-foreground font-medium">Competitor:</span>
-            <span className="text-base font-bold text-foreground">{competitorScore}</span>
-            <span className="text-[10px] text-muted-foreground">/10</span>
+          <div className="flex items-center gap-1.5 bg-[hsl(var(--rating-positive))]/10 rounded-md px-2.5 py-1">
+            <span className="text-xs text-[hsl(var(--rating-positive))] font-medium">Competitor:</span>
+            <span className="text-base font-bold text-[hsl(var(--rating-positive))]">{competitorScore}</span>
+            <span className="text-[10px] text-[hsl(var(--rating-positive))]/70">/10</span>
           </div>
           
           {/* Status badges */}
