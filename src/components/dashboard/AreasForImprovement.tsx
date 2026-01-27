@@ -25,8 +25,8 @@ export function AreasForImprovement({ data }: AreasForImprovementProps) {
         <CardContent className="p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary/10">
-                <AlertTriangle className="h-5 w-5 text-primary" />
+              <div className="p-2.5 rounded-xl bg-amber-100 dark:bg-amber-900/30">
+                <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
                 <h2 className="text-base font-semibold text-foreground">
