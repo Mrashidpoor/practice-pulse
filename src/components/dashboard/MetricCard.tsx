@@ -27,8 +27,8 @@ const ComparisonBar = ({
   return (
     <div className="space-y-1 w-full">
       <div className="flex items-center gap-1.5">
-        <span className="text-[9px] text-muted-foreground w-6">You</span>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+        <span className="text-[9px] text-muted-foreground w-8">You</span>
+        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
           <div 
             className={cn(
               "h-full rounded-full transition-all duration-500",
@@ -39,8 +39,8 @@ const ComparisonBar = ({
         </div>
       </div>
       <div className="flex items-center gap-1.5">
-        <span className="text-[9px] text-muted-foreground w-6">Comp</span>
-        <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+        <span className="text-[9px] text-muted-foreground w-8">Comp</span>
+        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
           <div 
             className="h-full rounded-full bg-muted-foreground/40 transition-all duration-500"
             style={{ width: `${compWidth}%` }}
@@ -65,21 +65,21 @@ export function MetricCard({
   const isBehind = difference < 0;
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <h4 className="text-[10px] font-medium text-muted-foreground">{title}</h4>
+    <div className="space-y-2">
+      <h4 className="text-xs font-medium text-muted-foreground">{title}</h4>
       
       <ComparisonBar yourValue={yourNum} competitorValue={compNum} isAhead={isAhead} />
       
       <div className="flex items-center justify-between">
         <div className="flex items-baseline gap-1">
-          <span className="text-sm font-bold text-foreground">{yourValue}</span>
-          <span className="text-[10px] text-muted-foreground">vs {competitorValue}</span>
+          <span className="text-base font-bold text-foreground">{yourValue}{type === "percentage" ? "%" : ""}</span>
+          <span className="text-xs text-muted-foreground">vs {competitorValue}{type === "percentage" ? "%" : ""}</span>
         </div>
         
         {showDifference && (
           <span
             className={cn(
-              "flex items-center gap-0.5 text-[10px] font-medium",
+              "flex items-center gap-0.5 text-xs font-medium",
               isAhead && "text-[hsl(var(--rating-positive))]",
               isBehind && "text-[hsl(var(--rating-negative))]",
               !isAhead && !isBehind && "text-muted-foreground"
@@ -87,13 +87,13 @@ export function MetricCard({
           >
             {isAhead ? (
               <>
-                <ThumbsUp className="h-2.5 w-2.5" />
+                <ThumbsUp className="h-3 w-3" />
                 +{Math.abs(difference)}{type === "percentage" ? "%" : ""}
               </>
             ) : isBehind ? (
               <>
-                <ThumbsDown className="h-2.5 w-2.5" />
-                -{Math.abs(difference)}{type === "percentage" ? "%" : ""}
+                <ThumbsDown className="h-3 w-3" />
+                {Math.abs(difference)}{type === "percentage" ? "%" : ""}
               </>
             ) : (
               "Tied"
