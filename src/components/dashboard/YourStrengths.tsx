@@ -58,13 +58,11 @@ export function YourStrengths({ strengths, topEmployees }: YourStrengthsProps) {
         </CardContent>
       </Card>
 
-      {/* Strength Cards Grid - connected container */}
-      <div className="border border-t-0 border-border rounded-b-lg bg-card p-3">
-        <div className="grid gap-3 md:grid-cols-2">
-          {strengths.map((strength) => (
-            <StrengthCard key={strength.category} strength={strength} />
-          ))}
-        </div>
+      {/* Strength Cards List - connected container */}
+      <div className="border border-t-0 border-border rounded-b-lg bg-card p-3 space-y-2">
+        {strengths.map((strength) => (
+          <StrengthCard key={strength.category} strength={strength} />
+        ))}
       </div>
 
       {/* Top Rated Employees */}
