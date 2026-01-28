@@ -7,58 +7,59 @@ import { Link } from "react-router-dom";
 interface ColorToken {
   name: string;
   variable: string;
+  tailwindClass: string;
   description: string;
 }
 
 const coreColors: ColorToken[] = [
-  { name: "Background", variable: "--background", description: "Main page background" },
-  { name: "Foreground", variable: "--foreground", description: "Primary text color" },
-  { name: "Card", variable: "--card", description: "Card backgrounds" },
-  { name: "Card Foreground", variable: "--card-foreground", description: "Card text color" },
-  { name: "Popover", variable: "--popover", description: "Popover backgrounds" },
-  { name: "Popover Foreground", variable: "--popover-foreground", description: "Popover text" },
+  { name: "Background", variable: "--background", tailwindClass: "bg-background", description: "Main page background" },
+  { name: "Foreground", variable: "--foreground", tailwindClass: "text-foreground", description: "Primary text color" },
+  { name: "Card", variable: "--card", tailwindClass: "bg-card", description: "Card backgrounds" },
+  { name: "Card Foreground", variable: "--card-foreground", tailwindClass: "text-card-foreground", description: "Card text color" },
+  { name: "Popover", variable: "--popover", tailwindClass: "bg-popover", description: "Popover backgrounds" },
+  { name: "Popover Foreground", variable: "--popover-foreground", tailwindClass: "text-popover-foreground", description: "Popover text" },
 ];
 
 const brandColors: ColorToken[] = [
-  { name: "Primary", variable: "--primary", description: "Brand teal - buttons, links, charts" },
-  { name: "Primary Foreground", variable: "--primary-foreground", description: "Text on primary" },
-  { name: "Secondary", variable: "--secondary", description: "Secondary backgrounds" },
-  { name: "Secondary Foreground", variable: "--secondary-foreground", description: "Secondary text" },
-  { name: "Accent", variable: "--accent", description: "Accent highlights" },
-  { name: "Accent Foreground", variable: "--accent-foreground", description: "Accent text" },
-  { name: "Muted", variable: "--muted", description: "Muted backgrounds" },
-  { name: "Muted Foreground", variable: "--muted-foreground", description: "Muted/subtle text" },
+  { name: "Primary", variable: "--primary", tailwindClass: "bg-primary", description: "Brand teal - buttons, links, charts" },
+  { name: "Primary Foreground", variable: "--primary-foreground", tailwindClass: "text-primary-foreground", description: "Text on primary" },
+  { name: "Secondary", variable: "--secondary", tailwindClass: "bg-secondary", description: "Secondary backgrounds" },
+  { name: "Secondary Foreground", variable: "--secondary-foreground", tailwindClass: "text-secondary-foreground", description: "Secondary text" },
+  { name: "Accent", variable: "--accent", tailwindClass: "bg-accent", description: "Accent highlights" },
+  { name: "Accent Foreground", variable: "--accent-foreground", tailwindClass: "text-accent-foreground", description: "Accent text" },
+  { name: "Muted", variable: "--muted", tailwindClass: "bg-muted", description: "Muted backgrounds" },
+  { name: "Muted Foreground", variable: "--muted-foreground", tailwindClass: "text-muted-foreground", description: "Muted/subtle text" },
 ];
 
 const semanticColors: ColorToken[] = [
-  { name: "Destructive", variable: "--destructive", description: "Error states, delete actions" },
-  { name: "Destructive Foreground", variable: "--destructive-foreground", description: "Text on destructive" },
-  { name: "Border", variable: "--border", description: "Default borders" },
-  { name: "Input", variable: "--input", description: "Input borders" },
-  { name: "Ring", variable: "--ring", description: "Focus rings" },
+  { name: "Destructive", variable: "--destructive", tailwindClass: "bg-destructive", description: "Error states, delete actions" },
+  { name: "Destructive Foreground", variable: "--destructive-foreground", tailwindClass: "text-destructive-foreground", description: "Text on destructive" },
+  { name: "Border", variable: "--border", tailwindClass: "border-border", description: "Default borders" },
+  { name: "Input", variable: "--input", tailwindClass: "border-input", description: "Input borders" },
+  { name: "Ring", variable: "--ring", tailwindClass: "ring-ring", description: "Focus rings" },
 ];
 
 const dashboardColors: ColorToken[] = [
-  { name: "Improvement", variable: "--improvement", description: "Areas for Improvement tab - amber warning" },
-  { name: "Improvement Foreground", variable: "--improvement-foreground", description: "Text on improvement" },
-  { name: "Strength", variable: "--strength", description: "Your Strengths tab - green success" },
-  { name: "Strength Foreground", variable: "--strength-foreground", description: "Text on strength" },
-  { name: "Metrics", variable: "--metrics", description: "Marketing Insights - teal metrics" },
-  { name: "Metrics Foreground", variable: "--metrics-foreground", description: "Text on metrics" },
+  { name: "Improvement", variable: "--improvement", tailwindClass: "bg-improvement", description: "Areas for Improvement tab - amber warning" },
+  { name: "Improvement Foreground", variable: "--improvement-foreground", tailwindClass: "text-improvement-foreground", description: "Text on improvement" },
+  { name: "Strength", variable: "--strength", tailwindClass: "bg-strength", description: "Your Strengths tab - green success" },
+  { name: "Strength Foreground", variable: "--strength-foreground", tailwindClass: "text-strength-foreground", description: "Text on strength" },
+  { name: "Metrics", variable: "--metrics", tailwindClass: "bg-metrics", description: "Marketing Insights - teal metrics" },
+  { name: "Metrics Foreground", variable: "--metrics-foreground", tailwindClass: "text-metrics-foreground", description: "Text on metrics" },
 ];
 
 const ratingColors: ColorToken[] = [
-  { name: "Rating Positive", variable: "--rating-positive", description: "Green - scores ≥7, strengths, success" },
-  { name: "Rating Neutral", variable: "--rating-neutral", description: "Amber - scores 5-7, warnings, stars" },
-  { name: "Rating Negative", variable: "--rating-negative", description: "Red - scores <5, high priority, errors" },
+  { name: "Rating Positive", variable: "--rating-positive", tailwindClass: "bg-[hsl(var(--rating-positive))]", description: "Green - scores ≥7, strengths, success" },
+  { name: "Rating Neutral", variable: "--rating-neutral", tailwindClass: "bg-[hsl(var(--rating-neutral))]", description: "Amber - scores 5-7, warnings, stars" },
+  { name: "Rating Negative", variable: "--rating-negative", tailwindClass: "bg-[hsl(var(--rating-negative))]", description: "Red - scores <5, high priority, errors" },
 ];
 
 const sidebarColors: ColorToken[] = [
-  { name: "Sidebar", variable: "--sidebar-background", description: "Sidebar background" },
-  { name: "Sidebar Foreground", variable: "--sidebar-foreground", description: "Sidebar text" },
-  { name: "Sidebar Primary", variable: "--sidebar-primary", description: "Sidebar primary" },
-  { name: "Sidebar Accent", variable: "--sidebar-accent", description: "Sidebar hover states" },
-  { name: "Sidebar Border", variable: "--sidebar-border", description: "Sidebar borders" },
+  { name: "Sidebar", variable: "--sidebar-background", tailwindClass: "bg-sidebar", description: "Sidebar background" },
+  { name: "Sidebar Foreground", variable: "--sidebar-foreground", tailwindClass: "text-sidebar-foreground", description: "Sidebar text" },
+  { name: "Sidebar Primary", variable: "--sidebar-primary", tailwindClass: "bg-sidebar-primary", description: "Sidebar primary" },
+  { name: "Sidebar Accent", variable: "--sidebar-accent", tailwindClass: "bg-sidebar-accent", description: "Sidebar hover states" },
+  { name: "Sidebar Border", variable: "--sidebar-border", tailwindClass: "border-sidebar-border", description: "Sidebar borders" },
 ];
 
 function ColorSwatch({ token, isDark }: { token: ColorToken; isDark: boolean }) {
@@ -68,10 +69,11 @@ function ColorSwatch({ token, isDark }: { token: ColorToken; isDark: boolean }) 
         className="w-12 h-12 rounded-lg border border-border shadow-sm shrink-0"
         style={{ backgroundColor: `hsl(var(${token.variable}))` }}
       />
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 space-y-1">
         <div className="font-medium text-sm text-foreground">{token.name}</div>
-        <code className="text-xs text-muted-foreground font-mono">{token.variable}</code>
-        <p className="text-xs text-muted-foreground mt-0.5 truncate">{token.description}</p>
+        <code className="block text-xs text-muted-foreground font-mono">{token.variable}</code>
+        <code className="block text-xs text-primary font-mono font-semibold">{token.tailwindClass}</code>
+        <p className="text-xs text-muted-foreground truncate">{token.description}</p>
       </div>
     </div>
   );
